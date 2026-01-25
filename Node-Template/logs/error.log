@@ -1,0 +1,378 @@
+{"level":"error","message":"Redis Client Error: read ECONNRESET","timestamp":"2025-12-17T11:03:28.402Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-10022.c74.us-east-1-4.ec2.cloud.redislabs.com","timestamp":"2025-12-17T11:03:28.432Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-10022.c74.us-east-1-4.ec2.cloud.redislabs.com","timestamp":"2025-12-17T11:03:28.866Z"}
+{"level":"error","message":"Redis Client Error: read ECONNRESET","timestamp":"2025-12-17T11:08:18.040Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-10022.c74.us-east-1-4.ec2.cloud.redislabs.com","timestamp":"2025-12-17T11:08:18.080Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-10022.c74.us-east-1-4.ec2.cloud.redislabs.com","timestamp":"2025-12-17T11:08:18.262Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-10022.c74.us-east-1-4.ec2.cloud.redislabs.com","timestamp":"2025-12-17T11:08:18.402Z"}
+{"level":"error","message":"Redis Client Error: read ECONNRESET","timestamp":"2025-12-17T11:08:40.645Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-10022.c74.us-east-1-4.ec2.cloud.redislabs.com","timestamp":"2025-12-17T11:08:40.926Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-10022.c74.us-east-1-4.ec2.cloud.redislabs.com","timestamp":"2025-12-17T11:08:41.094Z"}
+{"level":"error","message":"Redis Client Error: read ECONNRESET","timestamp":"2025-12-17T11:13:58.141Z"}
+{"error":{"expiredAt":"2025-12-17T09:59:37.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2025-12-17T11:31:29.244Z"}
+{"error":{"message":"jwt malformed","name":"JsonWebTokenError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2025-12-17T11:34:20.217Z"}
+{"error":{"message":"jwt malformed","name":"JsonWebTokenError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2025-12-17T11:41:58.140Z"}
+{"error":{"message":"jwt malformed","name":"JsonWebTokenError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2025-12-17T11:42:28.895Z"}
+{"error":{"expiredAt":"2025-12-17T11:43:25.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2025-12-17T11:49:00.675Z"}
+{"error":{"expiredAt":"2025-12-17T11:50:08.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2025-12-17T11:52:24.991Z"}
+{"error":{"expiredAt":"2025-12-17T11:50:08.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2025-12-17T11:54:20.710Z"}
+{"error":{"expiredAt":"2025-12-17T11:50:08.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2025-12-17T11:54:39.034Z"}
+{"level":"error","message":{"msg":"Duplicate Phone number","sts":404},"timestamp":"2025-12-17T11:54:49.602Z"}
+{"error":{"expiredAt":"2025-12-17T11:55:44.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2025-12-17T12:00:22.249Z"}
+{"level":"error","message":{"msg":"Internal Server error","sts":500},"timestamp":"2025-12-17T12:00:31.901Z"}
+{"error":{"expiredAt":"2025-12-17T12:01:27.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2025-12-17T12:05:06.672Z"}
+{"error":{"expiredAt":"2025-12-17T11:32:29.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2025-12-17T12:06:33.676Z"}
+{"error":{"expiredAt":"2025-12-17T12:07:34.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2025-12-17T12:07:50.236Z"}
+{"error":{"expiredAt":"2025-12-17T12:08:50.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2025-12-17T12:13:00.571Z"}
+{"error":{"expiredAt":"2025-12-17T12:14:00.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2025-12-17T12:14:12.379Z"}
+{"error":{"expiredAt":"2025-12-17T12:15:12.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2025-12-17T12:15:15.491Z"}
+{"error":{"expiredAt":"2025-12-17T12:16:16.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2025-12-17T12:16:54.102Z"}
+{"error":{"expiredAt":"2025-12-17T12:17:54.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2025-12-17T12:22:44.640Z"}
+{"error":{"expiredAt":"2025-12-17T12:23:44.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2025-12-17T12:28:45.965Z"}
+{"error":{"expiredAt":"2025-12-17T12:29:46.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2025-12-17T12:30:24.539Z"}
+{"level":"error","message":"Redis Client Error: read ECONNRESET","timestamp":"2025-12-17T12:45:28.478Z"}
+{"error":{"expiredAt":"2025-12-17T12:06:12.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2025-12-17T12:57:29.504Z"}
+{"level":"error","message":{"msg":"Internal Server error","sts":500},"timestamp":"2025-12-17T12:57:43.236Z"}
+{"error":{"expiredAt":"2025-12-17T12:58:38.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2025-12-17T12:58:39.397Z"}
+{"error":{"expiredAt":"2025-12-17T14:29:45.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2025-12-17T14:37:35.505Z"}
+{"level":"error","message":{"msg":"Internal Server error","sts":500},"timestamp":"2025-12-17T14:37:36.288Z"}
+{"level":"error","message":"Redis Client Error: read ECONNRESET","timestamp":"2025-12-17T15:41:50.494Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-10022.c74.us-east-1-4.ec2.cloud.redislabs.com","timestamp":"2025-12-17T15:41:50.943Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-10022.c74.us-east-1-4.ec2.cloud.redislabs.com","timestamp":"2025-12-17T15:41:51.274Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-10022.c74.us-east-1-4.ec2.cloud.redislabs.com","timestamp":"2025-12-17T15:41:51.482Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-10022.c74.us-east-1-4.ec2.cloud.redislabs.com","timestamp":"2025-12-17T15:41:51.733Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-10022.c74.us-east-1-4.ec2.cloud.redislabs.com","timestamp":"2025-12-17T15:41:52.229Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-10022.c74.us-east-1-4.ec2.cloud.redislabs.com","timestamp":"2025-12-17T15:41:53.155Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-10022.c74.us-east-1-4.ec2.cloud.redislabs.com","timestamp":"2025-12-17T15:41:54.861Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-10022.c74.us-east-1-4.ec2.cloud.redislabs.com","timestamp":"2025-12-17T16:37:15.460Z"}
+{"level":"error","message":"Redis Client Error: read ECONNRESET","timestamp":"2025-12-18T09:55:50.706Z"}
+{"level":"error","message":"Redis Client Error: read ECONNRESET","timestamp":"2025-12-18T10:17:44.149Z"}
+{"level":"error","message":"Redis Client Error: read ECONNRESET","timestamp":"2025-12-18T10:20:20.387Z"}
+{"level":"error","message":"Redis Client Error: read ECONNRESET","timestamp":"2025-12-18T10:55:49.525Z"}
+{"level":"error","message":"Redis Client Error: read ECONNRESET","timestamp":"2025-12-18T10:56:24.511Z"}
+{"level":"error","message":"Redis Client Error: read ECONNRESET","timestamp":"2025-12-18T11:25:30.382Z"}
+{"level":"error","message":"Redis Client Error: read ECONNRESET","timestamp":"2025-12-18T11:56:20.785Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-10022.c74.us-east-1-4.ec2.cloud.redislabs.com","timestamp":"2025-12-18T11:56:20.995Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-10022.c74.us-east-1-4.ec2.cloud.redislabs.com","timestamp":"2025-12-18T11:56:21.108Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-10022.c74.us-east-1-4.ec2.cloud.redislabs.com","timestamp":"2025-12-18T11:56:21.255Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-10022.c74.us-east-1-4.ec2.cloud.redislabs.com","timestamp":"2025-12-18T11:56:21.541Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-10022.c74.us-east-1-4.ec2.cloud.redislabs.com","timestamp":"2025-12-18T11:56:22.087Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-10022.c74.us-east-1-4.ec2.cloud.redislabs.com","timestamp":"2025-12-18T11:56:23.079Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-10022.c74.us-east-1-4.ec2.cloud.redislabs.com","timestamp":"2025-12-18T11:56:24.758Z"}
+{"level":"error","message":"Redis Client Error: read ECONNRESET","timestamp":"2025-12-18T12:25:42.640Z"}
+{"error":{"expiredAt":"2025-12-18T06:48:02.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2025-12-18T12:31:18.324Z"}
+{"error":{"expiredAt":"2025-12-18T06:48:02.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2025-12-18T12:31:18.353Z"}
+{"level":"error","message":"Redis Client Error: read ECONNRESET","timestamp":"2025-12-18T12:42:20.672Z"}
+{"error":{"expiredAt":"2025-12-18T12:32:18.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2025-12-18T12:42:25.953Z"}
+{"level":"error","message":"Redis Client Error: read ECONNRESET","timestamp":"2025-12-18T12:45:53.304Z"}
+{"error":{"expiredAt":"2025-12-18T12:43:26.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2025-12-18T12:45:57.775Z"}
+{"level":"error","message":"Redis Client Error: read ECONNRESET","timestamp":"2025-12-18T12:56:28.863Z"}
+{"error":{"expiredAt":"2025-12-18T12:46:58.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2025-12-18T12:56:33.491Z"}
+{"level":"error","message":"Redis Client Error: read ECONNRESET","timestamp":"2025-12-18T13:08:28.285Z"}
+{"error":{"expiredAt":"2025-12-18T12:57:33.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2025-12-18T13:08:33.049Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-10022.c74.us-east-1-4.ec2.cloud.redislabs.com","timestamp":"2026-01-24T03:46:48.005Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-10022.c74.us-east-1-4.ec2.cloud.redislabs.com","timestamp":"2026-01-24T03:46:48.224Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-10022.c74.us-east-1-4.ec2.cloud.redislabs.com","timestamp":"2026-01-24T03:46:48.345Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-10022.c74.us-east-1-4.ec2.cloud.redislabs.com","timestamp":"2026-01-24T03:46:48.697Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-10022.c74.us-east-1-4.ec2.cloud.redislabs.com","timestamp":"2026-01-24T03:46:49.144Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-10022.c74.us-east-1-4.ec2.cloud.redislabs.com","timestamp":"2026-01-24T03:46:50.017Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-10022.c74.us-east-1-4.ec2.cloud.redislabs.com","timestamp":"2026-01-24T03:46:51.750Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-10022.c74.us-east-1-4.ec2.cloud.redislabs.com","timestamp":"2026-01-24T03:46:53.901Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-12339.c100.us-east-1-4.ec2.cloud.redislabs.com:12339","timestamp":"2026-01-24T03:51:49.375Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-12339.c100.us-east-1-4.ec2.cloud.redislabs.com:12339","timestamp":"2026-01-24T03:51:49.500Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-12339.c100.us-east-1-4.ec2.cloud.redislabs.com:12339","timestamp":"2026-01-24T03:51:49.771Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-12339.c100.us-east-1-4.ec2.cloud.redislabs.com:12339","timestamp":"2026-01-24T03:51:49.987Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-12339.c100.us-east-1-4.ec2.cloud.redislabs.com:12339","timestamp":"2026-01-24T03:51:50.401Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-12339.c100.us-east-1-4.ec2.cloud.redislabs.com:12339","timestamp":"2026-01-24T03:51:51.304Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-12339.c100.us-east-1-4.ec2.cloud.redislabs.com:12339","timestamp":"2026-01-24T03:51:52.931Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-12339.c100.us-east-1-4.ec2.cloud.redislabs.com:12339","timestamp":"2026-01-24T03:51:54.981Z"}
+{"level":"error","message":"Redis Client Error: read ECONNRESET","timestamp":"2026-01-24T05:02:55.927Z"}
+{"level":"error","message":"Redis Client Error: read ECONNRESET","timestamp":"2026-01-24T07:12:43.945Z"}
+{"level":"error","message":"Redis Client Error: read ECONNRESET","timestamp":"2026-01-24T08:36:42.653Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T08:36:42.813Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T08:36:43.134Z"}
+{"error":{"expiredAt":"2026-01-24T11:00:01.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2026-01-24T11:44:20.664Z"}
+{"level":"error","message":"Redis Client Error: read ECONNRESET","timestamp":"2026-01-24T11:45:15.851Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:45:15.892Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:45:16.090Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:45:16.376Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:45:16.734Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:45:17.284Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:45:18.191Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:45:19.840Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:45:22.615Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:45:24.638Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:45:26.822Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:45:28.965Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:45:31.138Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:45:33.246Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:45:35.505Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:45:37.535Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:45:39.720Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:45:41.828Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:45:43.962Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:45:45.977Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:45:48.023Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:45:50.104Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:45:52.279Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:45:54.423Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:45:57.071Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:45:59.184Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:46:01.315Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:46:03.358Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:46:05.378Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:46:07.540Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:46:09.718Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:46:12.067Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:46:14.103Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:46:16.307Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:46:18.414Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:46:20.560Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:46:22.615Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:46:24.776Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:46:26.976Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:46:29.195Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:46:31.277Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:46:33.324Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:46:35.447Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:46:37.671Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:46:39.846Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:46:41.960Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:46:44.098Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:46:46.195Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:46:48.263Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:46:50.389Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:46:52.533Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:46:54.685Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:46:56.791Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:46:58.843Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:47:00.932Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:47:03.036Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:47:05.115Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:47:07.184Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:47:09.252Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:47:11.443Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:47:13.488Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:47:15.563Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:47:17.655Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:47:19.777Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:47:21.858Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:47:24.028Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:47:26.245Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:47:28.430Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:47:30.495Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:47:32.683Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:47:34.838Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:47:37.041Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:47:39.112Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:47:41.254Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:47:43.453Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:47:46.103Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:47:48.334Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:47:50.377Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:47:52.429Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:47:54.516Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:47:56.669Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:47:58.841Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:48:01.004Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:48:03.181Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:48:05.381Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:48:07.447Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:48:09.578Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:48:11.620Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:48:13.733Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:48:15.794Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:48:17.915Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:48:20.048Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:48:22.142Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:48:24.278Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:48:26.426Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:48:28.450Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:48:30.625Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:48:32.696Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:48:34.848Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:48:37.047Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:48:39.092Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:48:41.182Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:48:43.390Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:48:45.511Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:48:47.717Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:48:49.868Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:48:51.984Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:48:54.215Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:48:56.420Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:48:58.439Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:49:00.517Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:49:02.566Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:49:04.597Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:49:06.828Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:49:08.926Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:49:10.951Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:49:13.147Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:49:15.309Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:49:17.373Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:49:19.394Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:49:21.542Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:49:23.610Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:49:25.641Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:49:27.800Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:49:29.889Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:49:32.093Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:49:34.275Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:49:36.293Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:49:38.494Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:49:40.630Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:49:42.716Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:49:44.893Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:49:46.950Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:49:48.979Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:49:51.145Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:49:53.299Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T11:49:55.513Z"}
+{"level":"error","message":"Redis Client Error: read ECONNRESET","timestamp":"2026-01-24T14:47:54.825Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T14:47:54.874Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T14:47:55.003Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T14:47:55.287Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T14:47:55.505Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T14:47:55.987Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T14:47:56.996Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T14:47:58.681Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T20:39:28.735Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-24T20:39:31.107Z"}
+{"level":"error","message":"Redis Client Error: read ECONNRESET","timestamp":"2026-01-25T06:38:58.377Z"}
+{"level":"error","message":"Redis Client Error: Connection timeout","timestamp":"2026-01-25T06:39:03.666Z"}
+{"level":"error","message":"Redis Client Error: read ECONNRESET","timestamp":"2026-01-25T11:54:01.045Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T11:54:01.072Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T11:54:01.320Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T11:54:01.603Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T11:54:01.995Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T11:54:02.464Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T11:54:03.372Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T11:54:05.038Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T11:54:07.152Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T11:54:09.317Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T11:54:11.352Z"}
+{"error":{"expiredAt":"2026-01-25T11:56:56.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2026-01-25T11:58:27.440Z"}
+{"level":"error","message":"Redis Client Error: read ECONNRESET","timestamp":"2026-01-25T13:18:42.860Z"}
+{"level":"error","message":"Redis Client Error: read ECONNRESET","timestamp":"2026-01-25T13:35:44.486Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:35:44.525Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:35:44.764Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:35:44.921Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:35:45.243Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:35:45.674Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:35:46.579Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:35:48.247Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:35:50.393Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:35:52.485Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:35:54.568Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:35:56.579Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:35:58.734Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:36:00.795Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:36:03.058Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:36:05.174Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:36:07.221Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:36:09.419Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:36:11.574Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:36:13.614Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:36:15.800Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:36:17.809Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:36:19.967Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:36:22.070Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:36:24.096Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:36:26.213Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:36:28.388Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:36:30.489Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:36:32.653Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:36:34.691Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:36:36.863Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:36:38.931Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:36:41.089Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:36:43.203Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:36:45.413Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:36:47.588Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:36:49.682Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:36:51.879Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:36:54.061Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:36:56.136Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:36:58.165Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:37:00.226Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:37:02.399Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:37:04.491Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:37:06.564Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:37:08.639Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:37:10.670Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:37:12.807Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:37:14.925Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:37:17.069Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:37:19.145Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:37:21.279Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:37:23.415Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:37:25.599Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:37:27.780Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:37:29.882Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:37:32.073Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:37:34.136Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:37:36.203Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:37:38.355Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:37:40.439Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:37:42.470Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:37:44.497Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:37:46.652Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:37:48.703Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:37:50.881Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:37:53.012Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:37:55.202Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:37:57.318Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:37:59.393Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:38:01.423Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:38:03.558Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:38:05.579Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:38:07.601Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:38:09.646Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:38:11.691Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:38:13.742Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:38:15.870Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:38:17.950Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:38:20.052Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:38:22.138Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:38:24.295Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:38:26.310Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:38:28.403Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:38:30.421Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:38:32.496Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:38:34.683Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:38:36.762Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:38:38.873Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:38:41.074Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:38:43.257Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:38:45.384Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:38:47.432Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:38:49.495Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:38:51.532Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:38:53.632Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:38:55.664Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:38:57.764Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:38:59.831Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:39:01.879Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:39:04.047Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:39:06.114Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:39:08.198Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:39:10.403Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:39:12.546Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:39:14.654Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:39:16.863Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:39:18.915Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:39:21.113Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:39:23.283Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:39:25.347Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:39:27.374Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:39:29.453Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:47:18.072Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T13:47:20.258Z"}
+{"level":"error","message":"Redis Client Error: Connection timeout","timestamp":"2026-01-25T13:47:27.641Z"}
+{"error":{"expiredAt":"2026-01-25T13:20:05.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2026-01-25T13:54:58.854Z"}
+{"error":{"expiredAt":"2026-01-25T13:58:13.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2026-01-25T14:02:59.953Z"}
+{"level":"error","message":"Redis Client Error: read ECONNRESET","timestamp":"2026-01-25T14:07:26.101Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T14:07:26.240Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T14:07:26.488Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T14:07:27.262Z"}
