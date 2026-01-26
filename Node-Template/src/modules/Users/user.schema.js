@@ -21,12 +21,6 @@ const SCHEMA = new mongoose.Schema({
     password: {
         type: String,
         required: [true, "Password is required"],
-        // minlength: [3, 'Password must be at leaset 5 characters'],
-        // maxlength: [100, 'Password cannot exceed 50 characters'],
-        // validate: {
-        //     validator: (value) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(value),
-        //     message: "Invalid Password format"
-        // },
     },
     phone_number: {
         type: String,

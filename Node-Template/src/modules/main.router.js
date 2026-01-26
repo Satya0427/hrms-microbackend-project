@@ -9,7 +9,7 @@ const main_router = express.Router();
 
 
 main_router.use('/auth', auth_router);
-main_router.use('/user', user_router);
+main_router.use('/orginizations', orginization);
 main_router.use('/gallery',gallery_route)
 
 module.exports = main_router;
