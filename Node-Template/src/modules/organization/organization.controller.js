@@ -1,8 +1,10 @@
-const async_error_handler = require("../../common/utils/async_error_handler");
+
+const {async_error_handler} = require("../../common/utils/async_error_handler");
 const apiResponse = require("../../common/utils/api_response");
 const MESSAGES = require("../../common/utils/messages");
 
-const { ORGANIZATION_SCHEMA } = require("./organization.schema");
+const { ORGANIZATION_MODEL } = require("../../common/schemas/Organizations/organization.schema");
+const { validateOrganizationCreate } = require("./organization.validator");
 
 /**
  * CREATE ORGANIZATION
@@ -11,164 +13,154 @@ const createOrganizationAPIHandler = async_error_handler(async (req, res) => {
     let {
         organization_name,
         organization_code,
-        email,
-        phone_number,
+        domain,
+        industry,
+        company_size,
+        contact_email,
+        contact_phone,
         address,
-        subscription_plan
+        country,
+        timezone
     } = req.body;
 
-    // Required checks
-    if (!organization_name)
-        return res.status(400).json(apiResponse(400, "Organization name is required"));
-    if (!organization_code)
-        return res.status(400).json(apiResponse(400, "Organization code is required"));
-    if (!email)
-        return res.status(400).json(apiResponse(400, MESSAGES.EMAIL.REQUIRED));
-    if (!phone_number)
-        return res.status(400).json(apiResponse(400, MESSAGES.PHONE_NUMBER.REQUIRED));
+    // Basic required checks
+    const validationErrors = validateOrganizationCreate(req.body);
+    if (validationErrors.length > 0) {
+        return res.status(400).json(apiResponse(400, validationErrors.join(", ")));
+    }
 
-    // Type checks
-    if (typeof organization_name !== "string")
-        return res.status(400).json(apiResponse(400, "Organization name must be string"));
-    if (typeof organization_code !== "string")
-        return res.status(400).json(apiResponse(400, "Organization code must be string"));
-    if (typeof email !== "string")
-        return res.status(400).json(apiResponse(400, MESSAGES.EMAIL.TYPE));
-    if (typeof phone_number !== "string")
-        return res.status(400).json(apiResponse(400, MESSAGES.PHONE_NUMBER.TYPE));
-
-    // Trim
+    // Trim values
     organization_name = organization_name.trim();
-    organization_code = organization_code.trim().toUpperCase();
-    email = email.trim().toLowerCase();
-    phone_number = phone_number.trim();
-    address = address?.trim();
+    organization_code = organization_code.trim();
+    domain = domain.trim().toLowerCase();
+    contact_email = contact_email.trim().toLowerCase();
 
-    // Duplicate check
-    const existingOrg = await ORGANIZATION_SCHEMA.findOne({
-        $or: [{ organization_code }, { email }]
+    // Check duplicates
+    const existingOrg = await ORGANIZATION_MODEL.findOne({
+        $or: [{ organization_code }, { domain }],
+        is_deleted: false
     });
 
-    if (existingOrg)
-        return res.status(400).json(apiResponse(400, "Organization already exists"));
+    if (existingOrg) {
+        return res.status(400).json(apiResponse(400, "Organization code or domain already exists"));
+    }
 
-    const payload = {
+    const organization = await ORGANIZATION_MODEL.create({
         organization_name,
         organization_code,
-        email,
-        phone_number,
+        domain,
+        industry,
+        company_size,
+        contact_email,
+        contact_phone,
         address,
-        subscription_plan,
-        status: "Active"
-    };
+        country,
+        timezone,
+        created_by: req.user?.user_id
+    });
 
-    await ORGANIZATION_SCHEMA.create(payload);
-
-    return res
-        .status(200)
-        .json(apiResponse(200, `Organization created ${MESSAGES.SUCCESS}`));
+    return res.status(201).json(apiResponse(201, MESSAGES.SUCCESS, organization));
 });
 
 /**
- * LIST ORGANIZATIONS
- */
-const listOrganizationsAPIHandler = async_error_handler(async (req, res) => {
-    const organizations = await ORGANIZATION_SCHEMA.find({})
-        .select("-__v")
-        .sort({ createdAt: -1 });
-
-    return res
-        .status(200)
-        .json(apiResponse(200, MESSAGES.SUCCESS, organizations));
-});
-
-/**
- * VIEW ORGANIZATION
+ * GET ORGANIZATION BY ID
  */
 const getOrganizationByIdAPIHandler = async_error_handler(async (req, res) => {
-    const { organization_id } = req.params;
-
-    const organization = await ORGANIZATION_SCHEMA.findById(organization_id);
-
-    if (!organization)
+    const { organizationId } = req.params;
+    const organization = await ORGANIZATION_MODEL.findOne({
+        _id: organizationId,
+        is_deleted: false
+    });
+    if (!organization) {
         return res.status(404).json(apiResponse(404, "Organization not found"));
+    }
+    return res.status(200).json(apiResponse(200, MESSAGES.SUCCESS, organization));
+});
 
-    return res
-        .status(200)
-        .json(apiResponse(200, MESSAGES.SUCCESS, organization));
+/**
+ * LIST ORGANIZATIONS (Pagination + Filters)
+ */
+const listOrganizationsAPIHandler = async_error_handler(async (req, res) => {
+    const { page = 1, limit = 10, status, search } = req.query;
+
+    const query = { is_deleted: false };
+
+    if (status) query.status = status;
+    if (search) {
+        query.$or = [
+            { organization_name: { $regex: search, $options: "i" } },
+            { domain: { $regex: search, $options: "i" } }
+        ];
+    }
+
+    const organizations = await ORGANIZATION_MODEL.find(query)
+        .skip((page - 1) * limit)
+        .limit(Number(limit))
+        .sort({ createdAt: -1 });
+
+    const total = await ORGANIZATION_MODEL.countDocuments(query);
+
+    return res.status(200).json(
+        apiResponse(200, MESSAGES.SUCCESS, {
+            data: organizations,
+            total,
+            page: Number(page),
+            limit: Number(limit)
+        })
+    );
 });
 
 /**
  * UPDATE ORGANIZATION
  */
 const updateOrganizationAPIHandler = async_error_handler(async (req, res) => {
-    const { organization_id } = req.params;
-    let { email, phone_number, address, subscription_plan } = req.body;
+    const { organizationId } = req.params;
 
-    const organization = await ORGANIZATION_SCHEMA.findById(organization_id);
+    const updatedOrg = await ORGANIZATION_MODEL.findOneAndUpdate(
+        { _id: organizationId, is_deleted: false },
+        { ...req.body, updated_by: req.user?.user_id },
+        { new: true }
+    );
 
-    if (!organization)
+    if (!updatedOrg) {
         return res.status(404).json(apiResponse(404, "Organization not found"));
-
-    if (email) {
-        if (typeof email !== "string")
-            return res.status(400).json(apiResponse(400, MESSAGES.EMAIL.TYPE));
-        organization.email = email.trim().toLowerCase();
     }
-
-    if (phone_number) {
-        if (typeof phone_number !== "string")
-            return res.status(400).json(apiResponse(400, MESSAGES.PHONE_NUMBER.TYPE));
-        organization.phone_number = phone_number.trim();
-    }
-
-    if (address) {
-        organization.address = address.trim();
-    }
-
-    if (subscription_plan) {
-        organization.subscription_plan = subscription_plan;
-    }
-
-    await organization.save();
 
     return res
         .status(200)
-        .json(apiResponse(200, `Organization updated ${MESSAGES.SUCCESS}`));
+        .json(apiResponse(200, MESSAGES.SUCCESS, updatedOrg));
 });
 
 /**
- * ACTIVATE / DEACTIVATE ORGANIZATION
+ * ACTIVATE / SUSPEND ORGANIZATION
  */
-const changeOrganizationStatusAPIHandler = async_error_handler(async (req, res) => {
-    const { organization_id } = req.params;
-    const { status, reason } = req.body;
+const updateOrganizationStatusAPIHandler = async_error_handler(async (req, res) => {
+    const { organizationId } = req.params;
+    const { status } = req.body;
 
-    if (!status)
+    if (!status) {
         return res.status(400).json(apiResponse(400, "Status is required"));
+    }
 
-    if (!["Active", "Inactive"].includes(status))
-        return res.status(400).json(apiResponse(400, "Invalid status"));
+    const updatedOrg = await ORGANIZATION_MODEL.findOneAndUpdate(
+        { _id: organizationId, is_deleted: false },
+        { status, updated_by: req.user?.user_id },
+        { new: true }
+    );
 
-    const organization = await ORGANIZATION_SCHEMA.findById(organization_id);
-
-    if (!organization)
+    if (!updatedOrg) {
         return res.status(404).json(apiResponse(404, "Organization not found"));
-
-    organization.status = status;
-    organization.status_reason = reason?.trim();
-
-    await organization.save();
+    }
 
     return res
         .status(200)
-        .json(apiResponse(200, `Organization ${status.toLowerCase()} successfully`));
+        .json(apiResponse(200, "Organization status updated", updatedOrg));
 });
 
 module.exports = {
     createOrganizationAPIHandler,
-    listOrganizationsAPIHandler,
     getOrganizationByIdAPIHandler,
+    listOrganizationsAPIHandler,
     updateOrganizationAPIHandler,
-    changeOrganizationStatusAPIHandler
+    updateOrganizationStatusAPIHandler
 };

@@ -5,7 +5,9 @@ const logger = require("../logger")
 
 
 async function server_connection() {
-    await mongoose.connect(env.MONGO_URI).then(() => {
+    await mongoose.connect(env.MONGO_URI, {
+        autoIndex: true
+    }).then(() => {
         console.log('Database is connected successfully');
         logger.info("Database is connected successfully");
     }).catch(() => {

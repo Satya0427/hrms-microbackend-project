@@ -1,5 +1,4 @@
 const bcrypt = require("bcrypt");
-const { env } = require("../../config/env");
 
 /* Encrypt/Hah Password */
 async function encryptPassword(password) {

@@ -3,7 +3,7 @@
 const { async_error_handler } = require("../../common/utils/async_error_handler");
 const { apiResponse, apiDataResponse } = require("../../common/utils/api_response");
 const { MESSAGES } = require("../../common/utils/messages");
-const { USERS_SCHEMA } = require("../Users/user.schema");
+const { USERS_MODEL } = require("../../common/schemas/Users/user.schema");
 const { verifyPassword } = require("../../common/utils/common");
 const {
     storeTokens,
@@ -37,7 +37,7 @@ const loginAPIHandler = async_error_handler(async (req, res) => {
     // Trimming all the keys values
     email = email.trim();
     password = password.trim();
-    const userDetails = await USERS_SCHEMA.findOne({ email: email });
+    const userDetails = await USERS_MODEL.findOne({ email: email });
     if (!userDetails) return res.status(400).json(apiResponse(400, 'Please check UserID and Password'));
     const isPasswordMatch = await verifyPassword(password, userDetails?.password);
     if (!isPasswordMatch) return res.status(500).json(apiResponse(400, `Wrong Password`));

@@ -1,51 +1,128 @@
 const mongoose = require("mongoose");
 
-const SCHEMA = new mongoose.Schema({
-    organization_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "organizations",
-        required: [true, "Organization id is required"],
-    },
+const ORGANIZATION_SUBSCRIPTION_SCHEMA = new mongoose.Schema(
+    {
+        // ===== References =====
+        organization_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "organizations",
+            required: [true, "Organization ID is required"],
+            index: true
+        },
 
-    subscription_plan_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "subscription_plans",
-        required: [true, "Subscription plan id is required"],
-    },
+        subscription_plan_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "subscription_plans",
+            required: [true, "Subscription plan ID is required"]
+        },
 
-    start_date: {
-        type: Date,
-        required: [true, "Start date is required"],
-    },
+        // ===== Subscription Lifecycle =====
+        status: {
+            type: String,
+            required: true,
+            enum: ["TRIAL", "ACTIVE", "EXPIRED", "SUSPENDED", "CANCELLED"],
+            default: "TRIAL"
+        },
 
-    end_date: {
-        type: Date,
-        required: [true, "End date is required"],
-    },
+        start_date: {
+            type: Date,
+            required: true
+        },
 
-    status: {
-        type: String,
-        required: true,
-        enum: ["Active", "Expired", "Cancelled"],
-        default: "Active",
-        trim: true,
-    },
+        end_date: {
+            type: Date,
+            required: false
+        },
 
-    created_on: {
-        type: Date,
-        default: Date.now,
-    },
+        trial_start_date: {
+            type: Date,
+            required: false
+        },
 
-    updated_on: {
-        type: Date,
-        default: Date.now,
+        trial_end_date: {
+            type: Date,
+            required: false
+        },
+
+        // ===== Billing Snapshot =====
+        price: {
+            type: Number,
+            required: true,
+            min: [0, "Price cannot be negative"]
+        },
+
+        currency: {
+            type: String,
+            required: true,
+            default: "INR"
+        },
+
+        billing_cycle: {
+            type: String,
+            required: true,
+            enum: ["MONTHLY", "YEARLY"]
+        },
+
+        // ===== Plan Snapshot (IMPORTANT) =====
+        // We store snapshot so future plan changes don't affect existing customers
+        plan_snapshot: {
+            type: Object,
+            required: true
+        },
+
+        // ===== Platform Overrides =====
+        override_limits: {
+            type: Object,
+            default: {}
+        },
+
+        override_modules: {
+            type: Object,
+            default: {}
+        },
+
+        // ===== Control Flags =====
+        auto_renew: {
+            type: Boolean,
+            default: true
+        },
+
+        is_active: {
+            type: Boolean,
+            default: true
+        },
+
+        is_deleted: {
+            type: Boolean,
+            default: false
+        },
+
+        // ===== Audit =====
+        created_by: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "users"
+        },
+
+        updated_by: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "users"
+        },
+
+        // ===== Future Flexibility =====
+        metadata: {
+            type: Object,
+            default: {}
+        }
+    },
+    {
+        timestamps: true
     }
-});
+);
 
-const ORGANIZATION_SUBSCRIPTION_SCHEMA = mongoose.model(
+const ORGANIZATION_SUBSCRIPTION_MODEL = mongoose.model(
     "organization_subscriptions",
-    SCHEMA,
+    ORGANIZATION_SUBSCRIPTION_SCHEMA,
     "organization_subscriptions"
 );
 
-module.exports = { ORGANIZATION_SUBSCRIPTION_SCHEMA };
+module.exports = { ORGANIZATION_SUBSCRIPTION_MODEL };

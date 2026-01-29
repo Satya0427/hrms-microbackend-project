@@ -1,32 +1,8 @@
-const express = require("express");
-const {
-  createOrganizationAPIHandler,
-  getOrganizationsAPIHandler,
-  getOrganizationByIdAPIHandler
-} = require("./organization.controller");
-
-const {
-  accessTokenValidatorMiddleware
-} = require("../../common/middleware/error.middleware.ts");
+const express = require('express');
+const platformDashboardController = require('./platform_dashboard.controller');
 
 const router = express.Router();
 
-router.post(
-  "/create",
-  accessTokenValidatorMiddleware,
-  createOrganizationAPIHandler
-);
-
-router.get(
-  "/list",
-  accessTokenValidatorMiddleware,
-  getOrganizationsAPIHandler
-);
-
-router.get(
-  "/:organization_id",
-  accessTokenValidatorMiddleware,
-  getOrganizationByIdAPIHandler
-);
+// TODO: Add route definitions here
 
 module.exports = router;

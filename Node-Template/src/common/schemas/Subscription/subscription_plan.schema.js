@@ -1,83 +1,123 @@
 const mongoose = require("mongoose");
 
-const SCHEMA = new mongoose.Schema({
-    name: {
-        type: String,
-        required: [true, "Plan name is required"],
-        trim: true,
-        minlength: [3, "Plan name must be at least 3 characters"],
-        maxlength: [100, "Plan name cannot exceed 100 characters"],
-    },
+const SUBSCRIPTION_PLAN_SCHEMA = new mongoose.Schema(
+    {
+        // ===== Plan Identity =====
+        plan_name: {
+            type: String,
+            required: [true, "Plan name is required"],
+            trim: true,
+            unique: true,
+            minlength: [3, "Plan name must be at least 3 characters"],
+            maxlength: [50, "Plan name cannot exceed 50 characters"]
+        },
 
-    code: {
-        type: String,
-        required: [true, "Plan code is required"],
-        unique: [true, "Duplicate plan code"],
-        trim: true,
-        uppercase: true,
-        minlength: [3, "Plan code must be at least 3 characters"],
-        maxlength: [50, "Plan code cannot exceed 50 characters"],
-    },
+        plan_code: {
+            type: String,
+            required: [true, "Plan code is required"],
+            trim: true,
+            unique: true,
+            uppercase: true,
+            minlength: [2, "Plan code must be at least 2 characters"],
+            maxlength: [20, "Plan code cannot exceed 20 characters"]
+        },
 
-    monthly_price: {
-        type: Number,
-        required: false,
-        min: [0, "Monthly price cannot be negative"],
-    },
+        description: {
+            type: String,
+            trim: true,
+            maxlength: [250, "Description cannot exceed 250 characters"]
+        },
 
-    yearly_price: {
-        type: Number,
-        required: false,
-        min: [0, "Yearly price cannot be negative"],
-    },
-
-    employee_limit: {
-        type: Number,
-        required: true,
-        min: [1, "Employee limit must be at least 1"],
-    },
-
-    storage_limit_gb: {
-        type: Number,
-        required: true,
-        min: [1, "Storage limit must be at least 1 GB"],
-    },
-
-    modules: [
-        {
-            module_id: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "platform_modules",
+        // ===== Pricing (UI ALIGNED) =====
+        pricing: {
+            monthly_price: {
+                type: Number,
                 required: true,
+                min: [0, "Monthly price cannot be negative"]
             },
-            enabled: {
-                type: Boolean,
-                default: true,
+
+            yearly_price: {
+                type: Number,
+                required: true,
+                min: [0, "Yearly price cannot be negative"]
+            },
+
+            currency: {
+                type: String,
+                default: "INR"
             }
+        },
+
+        // ===== Limits (UI ALIGNED) =====
+        limits: {
+            employee_limit: {
+                type: Number,
+                required: true,
+                min: [0, "Employee limit cannot be negative"]
+            },
+
+            storage_limit_gb: {
+                type: Number,
+                required: true,
+                min: [0, "Storage limit cannot be negative"]
+            }
+        },
+
+        // ===== Feature Access (UI ALIGNED) =====
+        modules: {
+            recruitment: { type: Boolean, default: false },
+            onboarding: { type: Boolean, default: false },
+            payroll: { type: Boolean, default: false },
+            performance: { type: Boolean, default: false },
+            learning: { type: Boolean, default: false }
+        },
+
+        // ===== Plan Control =====
+        is_active: {
+            type: Boolean,
+            default: true
+        },
+
+        is_public: {
+            type: Boolean,
+            default: true
+        },
+
+        is_deleted: {
+            type: Boolean,
+            default: false
+        },
+
+        // ===== Audit =====
+        created_by: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "users"
+        },
+
+        updated_by: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "users"
+        },
+
+        // ===== Future Flexibility =====
+        metadata: {
+            type: Object,
+            default: {}
         }
-    ],
-
-    status: {
-        type: String,
-        enum: ["Active", "Inactive"],
-        default: "Active",
     },
-
-    created_on: {
-        type: Date,
-        default: Date.now,
-    },
-
-    updated_on: {
-        type: Date,
-        default: Date.now,
+    {
+        timestamps: true
     }
-});
+);
 
-const SUBSCRIPTION_PLAN_SCHEMA = mongoose.model(
+// ===== Indexes =====
+SUBSCRIPTION_PLAN_SCHEMA.index({ plan_code: 1 });
+SUBSCRIPTION_PLAN_SCHEMA.index({ plan_name: 1 });
+
+const SUBSCRIPTION_PLAN_MODEL = mongoose.model(
     "subscription_plans",
-    SCHEMA,
+    SUBSCRIPTION_PLAN_SCHEMA,
     "subscription_plans"
 );
 
-module.exports = { SUBSCRIPTION_PLAN_SCHEMA };
+module.exports = { SUBSCRIPTION_PLAN_MODEL };
