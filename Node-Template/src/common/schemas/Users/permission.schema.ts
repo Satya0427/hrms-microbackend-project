@@ -16,56 +16,73 @@ interface IPermission extends Document {
     updatedAt?: Date;
 }
 
-const PERMISSION_SCHEMA = new Schema<IPermission>(
+const ROLE_PERMISSION_SCHEMA = new Schema(
     {
-        // ===== Permission Identity =====
-        permission_name: {
-            type: String,
-            required: [true, "Permission name is required"],
-            trim: true,
-            minlength: [3, "Permission name must be at least 3 characters"],
-            maxlength: [100, "Permission name cannot exceed 100 characters"]
-        },
-
-        permission_code: {
-            type: String,
-            required: [true, "Permission code is required"],
-            trim: true,
-            uppercase: true,
-            unique: true,
-            minlength: [3, "Permission code must be at least 3 characters"],
-            maxlength: [100, "Permission code cannot exceed 100 characters"]
-        },
-
-        description: {
-            type: String,
-            required: false,
-            trim: true,
-            maxlength: [250, "Description cannot exceed 250 characters"]
-        },
-
-        // ===== Module Mapping =====
-        module_id: {
-            type: Schema.Types.ObjectId,
-            ref: "platform_modules",
-            required: false
-        },
-
-        // ===== Permission Scope =====
-        scope: {
-            type: String,
-            enum: ["PLATFORM", "ORGANIZATION"],
-            required: true
-        },
-
-        // ===== Action Type =====
-        action: {
+        role_code: {
             type: String,
             required: true,
-            enum: ["CREATE", "READ", "UPDATE", "DELETE", "APPROVE", "EXPORT"]
+            uppercase: true,
+            index: true
         },
 
-        // ===== Control Flags =====
+        module_code: {
+            type: String,
+            required: true,
+            uppercase: true,
+            index: true
+        },
+
+        feature_code: {
+            type: String,
+            required: true,
+            uppercase: true,
+            index: true
+        },
+
+        // ===== Action-Level Permissions =====
+        permissions: {
+            view: { type: Boolean, default: false },
+            create: { type: Boolean, default: false },
+            update: { type: Boolean, default: false },
+            delete: { type: Boolean, default: false },
+
+            // Future-proof actions
+            approve: { type: Boolean, default: false },
+            export: { type: Boolean, default: false },
+            assign: { type: Boolean, default: false },
+            configure: { type: Boolean, default: false }
+        },
+
+        // ===== Data Scope Rules =====
+        data_scope: {
+            type: String,
+            enum: [
+                "ALL",
+                "SELF",
+                "TEAM",
+                "DEPARTMENT",
+                "ORGANIZATION"
+            ],
+            default: "SELF"
+        },
+
+        // ===== Subscription Dependency =====
+        requires_subscription: {
+            type: Boolean,
+            default: false
+        },
+
+        min_plan_code: {
+            type: String
+        },
+
+        // ===== Overrides =====
+        allow_override: {
+            type: Boolean,
+            default: false
+        },
+
+        // ===== Control =====
         is_active: {
             type: Boolean,
             default: true
@@ -85,22 +102,15 @@ const PERMISSION_SCHEMA = new Schema<IPermission>(
         updated_by: {
             type: Schema.Types.ObjectId,
             ref: "users"
-        },
-
-        // ===== Future Flexibility =====
-        metadata: {
-            type: Object,
-            default: {}
         }
     },
-    {
-        timestamps: true
-    }
+    { timestamps: true }
 );
+
 
 const PERMISSION_MODEL = mongoose.model<IPermission>(
     "permissions",
-    PERMISSION_SCHEMA,
+    ROLE_PERMISSION_SCHEMA,
     "permissions"
 );
 

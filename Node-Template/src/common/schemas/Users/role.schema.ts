@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema, Document, Types } from 'mongoose';
 
 interface IRole extends Document {
     role_name: string;
@@ -17,38 +17,25 @@ interface IRole extends Document {
     updatedAt?: Date;
 }
 
-const ROLE_SCHEMA = new Schema<IRole>(
+const ROLE_SCHEMA = new Schema(
     {
-        // ===== Role Identity =====
         role_name: {
             type: String,
-            required: [true, "Role name is required"],
+            required: true,
             trim: true,
-            minlength: [3, "Role name must be at least 3 characters"],
-            maxlength: [50, "Role name cannot exceed 50 characters"]
+            minlength: 3,
+            maxlength: 50
         },
 
         role_code: {
             type: String,
-            required: [true, "Role code is required"],
-            trim: true,
+            required: true,
             uppercase: true,
-            unique: true,
-            minlength: [3, "Role code must be at least 3 characters"],
-            maxlength: [30, "Role code cannot exceed 30 characters"]
+            unique: true
         },
 
-        description: {
-            type: String,
-            required: false,
-            trim: true,
-            maxlength: [250, "Description cannot exceed 250 characters"]
-        },
-
-        // ===== Role Scope =====
         scope: {
             type: String,
-            required: true,
             enum: ["PLATFORM", "ORGANIZATION"],
             default: "ORGANIZATION"
         },
@@ -56,15 +43,14 @@ const ROLE_SCHEMA = new Schema<IRole>(
         organization_id: {
             type: Schema.Types.ObjectId,
             ref: "organizations",
-            required: function (this: IRole) {
+            required: function () {
                 return this.scope === "ORGANIZATION";
             }
         },
 
-        // ===== Default Role Flags =====
-        is_default: {
-            type: Boolean,
-            default: false
+        inherits_from: {
+            type: Schema.Types.ObjectId,
+            ref: "roles"
         },
 
         is_system_role: {
@@ -72,7 +58,6 @@ const ROLE_SCHEMA = new Schema<IRole>(
             default: false
         },
 
-        // ===== Control Flags =====
         is_active: {
             type: Boolean,
             default: true
@@ -81,29 +66,12 @@ const ROLE_SCHEMA = new Schema<IRole>(
         is_deleted: {
             type: Boolean,
             default: false
-        },
-
-        // ===== Audit =====
-        created_by: {
-            type: Schema.Types.ObjectId,
-            ref: "users"
-        },
-
-        updated_by: {
-            type: Schema.Types.ObjectId,
-            ref: "users"
-        },
-
-        // ===== Future Flexibility =====
-        metadata: {
-            type: Object,
-            default: {}
         }
     },
-    {
-        timestamps: true
-    }
+    { timestamps: true }
 );
+
+
 
 const ROLE_MODEL = mongoose.model<IRole>(
     "roles",
