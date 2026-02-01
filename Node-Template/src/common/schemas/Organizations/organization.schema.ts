@@ -121,29 +121,29 @@ export const ORGANIZATION_ONBOARDING_SCHEMA = new Schema(
             }
         },
 
-        // ================= GLOBAL ADMIN OBJECT =================
-        global_admin: {
-            name: {
-                type: String,
-                required: [true, "Admin name is required"],
-                trim: true,
-                maxlength: [100, "Admin name cannot exceed 100 characters"]
-            },
+        // // ================= GLOBAL ADMIN OBJECT =================
+        // global_admin: {
+        //     name: {
+        //         type: String,
+        //         required: [true, "Admin name is required"],
+        //         trim: true,
+        //         maxlength: [100, "Admin name cannot exceed 100 characters"]
+        //     },
 
-            contact_email: {
-                type: String,
-                required: [true, "Admin email is required"],
-                lowercase: true,
-                trim: true,
-                maxlength: [254, "Email cannot exceed 254 characters"]
-            },
+        //     contact_email: {
+        //         type: String,
+        //         required: [true, "Admin email is required"],
+        //         lowercase: true,
+        //         trim: true,
+        //         maxlength: [254, "Email cannot exceed 254 characters"]
+        //     },
 
-            contact_phone: {
-                type: String,
-                trim: true,
-                maxlength: [15, "Phone number cannot exceed 15 characters"]
-            }
-        },
+        //     contact_phone: {
+        //         type: String,
+        //         trim: true,
+        //         maxlength: [15, "Phone number cannot exceed 15 characters"]
+        //     }
+        // },
 
         // ================= PLATFORM CONTROL =================
         is_active: {

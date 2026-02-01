@@ -376,3 +376,26 @@
 {"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T14:07:26.240Z"}
 {"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T14:07:26.488Z"}
 {"level":"error","message":"Redis Client Error: getaddrinfo ENOTFOUND redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-01-25T14:07:27.262Z"}
+{"level":"error","message":"Redis Client Error: read ETIMEDOUT","timestamp":"2026-02-01T06:18:46.406Z"}
+{"level":"error","message":"Redis Client Error: Connection timeout","timestamp":"2026-02-01T06:18:51.416Z"}
+{"level":"error","message":"Redis Client Error: Connection timeout","timestamp":"2026-02-01T06:18:56.490Z"}
+{"level":"error","message":"Redis Client Error: Connection timeout","timestamp":"2026-02-01T06:19:01.636Z"}
+{"level":"error","message":"Redis Client Error: Connection timeout","timestamp":"2026-02-01T06:19:06.918Z"}
+{"level":"error","message":"Redis Client Error: Connection timeout","timestamp":"2026-02-01T06:19:12.447Z"}
+{"level":"error","message":"Redis Client Error: Connection timeout","timestamp":"2026-02-01T06:19:18.352Z"}
+{"level":"error","message":"Redis Client Error: Connection timeout","timestamp":"2026-02-01T06:19:24.992Z"}
+{"level":"error","message":"Redis Client Error: Connection timeout","timestamp":"2026-02-01T06:19:32.064Z"}
+{"level":"error","message":"Redis Client Error: Connection timeout","timestamp":"2026-02-01T06:19:39.267Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo EAI_AGAIN redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-02-01T06:19:45.473Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo EAI_AGAIN redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-02-01T06:19:47.501Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo EAI_AGAIN redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-02-01T06:19:49.635Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo EAI_AGAIN redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-02-01T06:19:51.823Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo EAI_AGAIN redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-02-01T06:19:53.924Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo EAI_AGAIN redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-02-01T06:19:56.101Z"}
+{"error":{"expiredAt":"2026-02-01T05:31:51.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2026-02-01T06:27:01.998Z"}
+{"error":{"expiredAt":"2026-02-01T05:31:51.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2026-02-01T06:27:02.041Z"}
+{"error":{"expiredAt":"2026-02-01T06:57:02.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2026-02-01T06:57:08.456Z"}
+{"field":"body.organization.domain","level":"error","message":"Validation error Invalid domain format","timestamp":"2026-02-01T06:58:20.102Z"}
+{"field":"body.organization.domain","level":"error","message":"Validation error Invalid domain format","timestamp":"2026-02-01T06:59:05.180Z"}
+{"level":"error","message":"Redis Client Error: read ETIMEDOUT","timestamp":"2026-02-01T11:23:32.653Z"}
+{"error":{"expiredAt":"2026-02-01T07:34:05.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2026-02-01T11:30:53.969Z"}

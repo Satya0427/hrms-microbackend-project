@@ -11,6 +11,7 @@ import subscription_router from './subscription/subscription_plan.router';
 import LOOKUP_ROUTER from '../common/controllers/lookups/lookup.router';
 import org_admin_router from './global-admin/org_admin.router';
 import MODULE_FEATURES_ROUTER from './module_features/module_features.router';
+import { ONBOARDING_ROUTER } from './onboarding-exit/onboarding.routes';
 
 const main_router: Router = express.Router();
 
@@ -24,5 +25,6 @@ main_router.use('/subscription', subscription_router);
 main_router.use('/org-admin',org_admin_router);
 main_router.use('/lookup', LOOKUP_ROUTER);
 main_router.use('/module-feature', MODULE_FEATURES_ROUTER);
+main_router.use('/onboarding', ONBOARDING_ROUTER);
 
 export default main_router;

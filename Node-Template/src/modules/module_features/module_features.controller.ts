@@ -182,66 +182,77 @@ const createModuleFeaturesAPIHandler = async_error_handler(async (req: CustomReq
 // }
 // );
 const listModuleFeaturesAPIHandler = async_error_handler(async (req: CustomRequest, res: Response) => {
+    // const modulesWithFeatures = await MODULE_MODEL.aggregate([
+    //     // Only active modules
+    //     {
+    //         $match: {
+    //             is_deleted: false,
+    //             is_active: true
+    //         }
+    //     },
+    //     // Sort modules (sidebar order)
+    //     {
+    //         $sort: {
+    //             display_order: 1,
+    //             createdAt: 1
+    //         }
+    //     },
+    //     //  Join features
+    //     {
+    //         $lookup: {
+    //             from: 'features',
+    //             let: { moduleCode: '$module_code' },
+    //             pipeline: [
+    //                 {
+    //                     $match: {
+    //                         $expr: {
+    //                             $and: [
+    //                                 { $eq: ['$module_code', '$$moduleCode'] },
+    //                                 { $eq: ['$is_deleted', false] },
+    //                                 { $eq: ['$is_active', true] }
+    //                             ]
+    //                         }
+    //                     }
+    //                 },
+    //                 {
+    //                     $sort: { createdAt: 1 }
+    //                 }
+    //             ],
+    //             as: 'features'
+    //         }
+    //     },
+    //     // Transform to sidebar format
+    //     {
+    //         $project: {
+    //             _id: 1,
+    //             label: '$module_name',
+    //             icon: '$icon',
+    //             active: { $literal: false },
+    //             expanded: { $literal: false },
+    //             subItems: {
+    //                 $map: {
+    //                     input: '$features',
+    //                     as: 'feature',
+    //                     in: {
+    //                         id: '$$feature._id',
+    //                         label: '$$feature.feature_name',
+    //                         route: '$$feature.route_path',
+    //                         icon: '$$feature.icon',
+    //                         active: { $literal: false }
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    // ]);
     const modulesWithFeatures = await MODULE_MODEL.aggregate([
-        // Only active modules
-        {
-            $match: {
-                is_deleted: false,
-                is_active: true
-            }
-        },
-        // Sort modules (sidebar order)
-        {
-            $sort: {
-                display_order: 1,
-                createdAt: 1
-            }
-        },
-        //  Join features
+        { $match: { is_active: true, is_deleted: false } },
         {
             $lookup: {
-                from: 'features',
-                let: { moduleCode: '$module_code' },
-                pipeline: [
-                    {
-                        $match: {
-                            $expr: {
-                                $and: [
-                                    { $eq: ['$module_code', '$$moduleCode'] },
-                                    { $eq: ['$is_deleted', false] },
-                                    { $eq: ['$is_active', true] }
-                                ]
-                            }
-                        }
-                    },
-                    {
-                        $sort: { createdAt: 1 }
-                    }
-                ],
-                as: 'features'
-            }
-        },
-        // Transform to sidebar format
-        {
-            $project: {
-                _id: 1,
-                label: '$module_name',
-                icon: '$icon',
-                active: { $literal: false },
-                expanded: { $literal: false },
-                subItems: {
-                    $map: {
-                        input: '$features',
-                        as: 'feature',
-                        in: {
-                            id: '$$feature._id',
-                            label: '$$feature.feature_name',
-                            route: '$$feature.route_path',
-                            icon: '$$feature.icon',
-                            active: { $literal: false }
-                        }
-                    }
-                }
+                from: "features",
+                localField: "module_code",
+                foreignField: "module_code",
+                as: "features"
             }
         }
     ]);

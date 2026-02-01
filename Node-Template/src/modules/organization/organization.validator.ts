@@ -93,7 +93,7 @@ export const createOrganizationOnboardingSchema = z.object({
     body: z.object({
         organization: OrganizationZodSchema,
         subscription: SubscriptionZodSchema,
-        global_admin: GlobalAdminZodSchema,
+        // global_admin: GlobalAdminZodSchema,
         organizationId: z.string().optional()
     })
 });

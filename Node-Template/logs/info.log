@@ -1230,3 +1230,156 @@
 {"level":"info","message":"Redis reconnecting","timestamp":"2026-01-25T14:07:27.886Z"}
 {"level":"info","message":"Redis connecting...","timestamp":"2026-01-25T14:07:28.667Z"}
 {"level":"info","message":"Redis ready","timestamp":"2026-01-25T14:07:29.078Z"}
+{"level":"info","message":"Database is connected successfully","timestamp":"2026-02-01T04:57:58.726Z"}
+{"level":"info","message":"Redis connecting...","timestamp":"2026-02-01T04:57:59.031Z"}
+{"level":"info","message":"Redis ready","timestamp":"2026-02-01T04:57:59.351Z"}
+{"level":"info","message":"All Db's are connected successfully","timestamp":"2026-02-01T04:57:59.352Z"}
+{"level":"info","message":"Server is running in 4000","timestamp":"2026-02-01T04:57:59.359Z"}
+{"level":"info","message":"Stored refresh token with REFRESHTOKEN_DATA:697edc790e153e34f38de666_9d9514d3-1892-45c6-b961-359e6fb76a80","timestamp":"2026-02-01T04:58:06.823Z"}
+{"level":"info","message":"Stored refresh token with REFRESHTOKEN_DATA:697edc790e153e34f38de666_0e72174f-7288-4e52-9533-4e68ecf340ef","timestamp":"2026-02-01T05:01:51.898Z"}
+{"level":"error","message":"Redis Client Error: read ETIMEDOUT","timestamp":"2026-02-01T06:18:46.406Z"}
+{"level":"info","message":"Redis reconnecting","timestamp":"2026-02-01T06:18:46.410Z"}
+{"level":"error","message":"Redis Client Error: Connection timeout","timestamp":"2026-02-01T06:18:51.416Z"}
+{"level":"info","message":"Redis reconnecting","timestamp":"2026-02-01T06:18:51.489Z"}
+{"level":"error","message":"Redis Client Error: Connection timeout","timestamp":"2026-02-01T06:18:56.490Z"}
+{"level":"info","message":"Redis reconnecting","timestamp":"2026-02-01T06:18:56.634Z"}
+{"level":"error","message":"Redis Client Error: Connection timeout","timestamp":"2026-02-01T06:19:01.636Z"}
+{"level":"info","message":"Redis reconnecting","timestamp":"2026-02-01T06:19:01.914Z"}
+{"level":"error","message":"Redis Client Error: Connection timeout","timestamp":"2026-02-01T06:19:06.918Z"}
+{"level":"info","message":"Redis reconnecting","timestamp":"2026-02-01T06:19:07.446Z"}
+{"level":"error","message":"Redis Client Error: Connection timeout","timestamp":"2026-02-01T06:19:12.447Z"}
+{"level":"info","message":"Redis reconnecting","timestamp":"2026-02-01T06:19:13.348Z"}
+{"level":"error","message":"Redis Client Error: Connection timeout","timestamp":"2026-02-01T06:19:18.352Z"}
+{"level":"info","message":"Redis reconnecting","timestamp":"2026-02-01T06:19:19.988Z"}
+{"level":"error","message":"Redis Client Error: Connection timeout","timestamp":"2026-02-01T06:19:24.992Z"}
+{"level":"info","message":"Redis reconnecting","timestamp":"2026-02-01T06:19:27.059Z"}
+{"level":"error","message":"Redis Client Error: Connection timeout","timestamp":"2026-02-01T06:19:32.064Z"}
+{"level":"info","message":"Redis reconnecting","timestamp":"2026-02-01T06:19:34.263Z"}
+{"level":"error","message":"Redis Client Error: Connection timeout","timestamp":"2026-02-01T06:19:39.267Z"}
+{"level":"info","message":"Redis reconnecting","timestamp":"2026-02-01T06:19:41.316Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo EAI_AGAIN redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-02-01T06:19:45.473Z"}
+{"level":"info","message":"Redis reconnecting","timestamp":"2026-02-01T06:19:47.500Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo EAI_AGAIN redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-02-01T06:19:47.501Z"}
+{"level":"info","message":"Redis reconnecting","timestamp":"2026-02-01T06:19:49.630Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo EAI_AGAIN redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-02-01T06:19:49.635Z"}
+{"level":"info","message":"Redis reconnecting","timestamp":"2026-02-01T06:19:51.818Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo EAI_AGAIN redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-02-01T06:19:51.823Z"}
+{"level":"info","message":"Redis reconnecting","timestamp":"2026-02-01T06:19:53.918Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo EAI_AGAIN redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-02-01T06:19:53.924Z"}
+{"level":"info","message":"Redis reconnecting","timestamp":"2026-02-01T06:19:56.096Z"}
+{"level":"error","message":"Redis Client Error: getaddrinfo EAI_AGAIN redis-15244.c281.us-east-1-2.ec2.cloud.redislabs.com","timestamp":"2026-02-01T06:19:56.101Z"}
+{"level":"info","message":"Redis reconnecting","timestamp":"2026-02-01T06:19:58.140Z"}
+{"level":"info","message":"Redis connecting...","timestamp":"2026-02-01T06:19:58.408Z"}
+{"level":"info","message":"Redis ready","timestamp":"2026-02-01T06:19:58.623Z"}
+{"error":{"expiredAt":"2026-02-01T05:31:51.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2026-02-01T06:27:01.998Z"}
+{"error":{"expiredAt":"2026-02-01T05:31:51.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2026-02-01T06:27:02.041Z"}
+{"level":"info","message":"Stored refresh token with REFRESHTOKEN_DATA:697edc790e153e34f38de666_f9990fd0-0e28-4369-b5cb-fd1068bfd383","timestamp":"2026-02-01T06:27:03.012Z"}
+{"level":"info","message":"Database is connected successfully","timestamp":"2026-02-01T06:30:21.541Z"}
+{"level":"info","message":"Redis connecting...","timestamp":"2026-02-01T06:30:22.277Z"}
+{"level":"info","message":"Redis ready","timestamp":"2026-02-01T06:30:22.585Z"}
+{"level":"info","message":"All Db's are connected successfully","timestamp":"2026-02-01T06:30:22.587Z"}
+{"level":"info","message":"Server is running in 4000","timestamp":"2026-02-01T06:30:22.594Z"}
+{"level":"info","message":"Database is connected successfully","timestamp":"2026-02-01T06:47:31.575Z"}
+{"level":"info","message":"Redis connecting...","timestamp":"2026-02-01T06:47:31.914Z"}
+{"level":"info","message":"Redis ready","timestamp":"2026-02-01T06:47:32.221Z"}
+{"level":"info","message":"All Db's are connected successfully","timestamp":"2026-02-01T06:47:32.222Z"}
+{"level":"info","message":"Server is running in 4000","timestamp":"2026-02-01T06:47:32.226Z"}
+{"level":"info","message":"Database is connected successfully","timestamp":"2026-02-01T06:51:07.256Z"}
+{"level":"info","message":"Redis connecting...","timestamp":"2026-02-01T06:51:07.568Z"}
+{"level":"info","message":"Redis ready","timestamp":"2026-02-01T06:51:07.875Z"}
+{"level":"info","message":"All Db's are connected successfully","timestamp":"2026-02-01T06:51:07.876Z"}
+{"level":"info","message":"Server is running in 4000","timestamp":"2026-02-01T06:51:07.877Z"}
+{"level":"info","message":"Database is connected successfully","timestamp":"2026-02-01T06:53:40.296Z"}
+{"level":"info","message":"Redis connecting...","timestamp":"2026-02-01T06:53:40.945Z"}
+{"level":"info","message":"Redis ready","timestamp":"2026-02-01T06:53:41.220Z"}
+{"level":"info","message":"All Db's are connected successfully","timestamp":"2026-02-01T06:53:41.223Z"}
+{"level":"info","message":"Server is running in 4000","timestamp":"2026-02-01T06:53:41.231Z"}
+{"error":{"expiredAt":"2026-02-01T06:57:02.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2026-02-01T06:57:08.456Z"}
+{"level":"info","message":"Stored refresh token with REFRESHTOKEN_DATA:697edc790e153e34f38de666_16eebd67-0656-4d71-9829-220c3311b9f9","timestamp":"2026-02-01T06:57:09.319Z"}
+{"field":"body.organization.domain","level":"error","message":"Validation error Invalid domain format","timestamp":"2026-02-01T06:58:20.102Z"}
+{"level":"info","message":"Database is connected successfully","timestamp":"2026-02-01T06:59:00.514Z"}
+{"level":"info","message":"Redis connecting...","timestamp":"2026-02-01T06:59:00.828Z"}
+{"level":"info","message":"Redis ready","timestamp":"2026-02-01T06:59:01.136Z"}
+{"level":"info","message":"All Db's are connected successfully","timestamp":"2026-02-01T06:59:01.138Z"}
+{"level":"info","message":"Server is running in 4000","timestamp":"2026-02-01T06:59:01.145Z"}
+{"field":"body.organization.domain","level":"error","message":"Validation error Invalid domain format","timestamp":"2026-02-01T06:59:05.180Z"}
+{"level":"info","message":"Stored refresh token with REFRESHTOKEN_DATA:697edc790e153e34f38de666_2d0c1f57-c9b9-45e5-8cd1-381cd22144ae","timestamp":"2026-02-01T07:04:05.864Z"}
+{"level":"info","message":"Database is connected successfully","timestamp":"2026-02-01T07:32:50.279Z"}
+{"level":"info","message":"Redis connecting...","timestamp":"2026-02-01T07:32:50.982Z"}
+{"level":"info","message":"Redis ready","timestamp":"2026-02-01T07:32:51.202Z"}
+{"level":"info","message":"All Db's are connected successfully","timestamp":"2026-02-01T07:32:51.203Z"}
+{"level":"info","message":"Server is running in 4000","timestamp":"2026-02-01T07:32:51.206Z"}
+{"level":"info","message":"Database is connected successfully","timestamp":"2026-02-01T07:35:03.831Z"}
+{"level":"info","message":"Redis connecting...","timestamp":"2026-02-01T07:35:04.136Z"}
+{"level":"info","message":"Redis ready","timestamp":"2026-02-01T07:35:04.414Z"}
+{"level":"info","message":"All Db's are connected successfully","timestamp":"2026-02-01T07:35:04.417Z"}
+{"level":"info","message":"Server is running in 4000","timestamp":"2026-02-01T07:35:04.427Z"}
+{"level":"info","message":"Database is connected successfully","timestamp":"2026-02-01T07:35:42.449Z"}
+{"level":"info","message":"Redis connecting...","timestamp":"2026-02-01T07:35:42.755Z"}
+{"level":"info","message":"Redis ready","timestamp":"2026-02-01T07:35:42.980Z"}
+{"level":"info","message":"All Db's are connected successfully","timestamp":"2026-02-01T07:35:42.981Z"}
+{"level":"info","message":"Server is running in 4000","timestamp":"2026-02-01T07:35:42.985Z"}
+{"level":"info","message":"Database is connected successfully","timestamp":"2026-02-01T07:36:09.548Z"}
+{"level":"info","message":"Redis connecting...","timestamp":"2026-02-01T07:36:09.846Z"}
+{"level":"info","message":"Redis ready","timestamp":"2026-02-01T07:36:10.067Z"}
+{"level":"info","message":"All Db's are connected successfully","timestamp":"2026-02-01T07:36:10.069Z"}
+{"level":"info","message":"Server is running in 4000","timestamp":"2026-02-01T07:36:10.077Z"}
+{"level":"info","message":"Database is connected successfully","timestamp":"2026-02-01T07:36:48.293Z"}
+{"level":"info","message":"Redis connecting...","timestamp":"2026-02-01T07:36:48.655Z"}
+{"level":"info","message":"Redis ready","timestamp":"2026-02-01T07:36:48.964Z"}
+{"level":"info","message":"All Db's are connected successfully","timestamp":"2026-02-01T07:36:48.966Z"}
+{"level":"info","message":"Server is running in 4000","timestamp":"2026-02-01T07:36:48.974Z"}
+{"level":"info","message":"Database is connected successfully","timestamp":"2026-02-01T07:37:16.560Z"}
+{"level":"info","message":"Redis connecting...","timestamp":"2026-02-01T07:37:16.918Z"}
+{"level":"info","message":"Redis ready","timestamp":"2026-02-01T07:37:17.226Z"}
+{"level":"info","message":"All Db's are connected successfully","timestamp":"2026-02-01T07:37:17.228Z"}
+{"level":"info","message":"Server is running in 4000","timestamp":"2026-02-01T07:37:17.235Z"}
+{"level":"error","message":"Redis Client Error: read ETIMEDOUT","timestamp":"2026-02-01T11:23:32.653Z"}
+{"level":"info","message":"Redis reconnecting","timestamp":"2026-02-01T11:23:32.656Z"}
+{"level":"info","message":"Redis connecting...","timestamp":"2026-02-01T11:23:32.886Z"}
+{"level":"info","message":"Redis ready","timestamp":"2026-02-01T11:23:33.099Z"}
+{"error":{"expiredAt":"2026-02-01T07:34:05.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error verifying access-token JWT","timestamp":"2026-02-01T11:30:53.969Z"}
+{"level":"info","message":"Stored refresh token with REFRESHTOKEN_DATA:697edc790e153e34f38de666_82054b23-fe4c-48d6-a5bb-ce96fef5528c","timestamp":"2026-02-01T11:30:55.196Z"}
+{"level":"info","message":"Database is connected successfully","timestamp":"2026-02-01T11:39:54.034Z"}
+{"level":"info","message":"Redis connecting...","timestamp":"2026-02-01T11:39:54.444Z"}
+{"level":"info","message":"Redis ready","timestamp":"2026-02-01T11:39:54.657Z"}
+{"level":"info","message":"All Db's are connected successfully","timestamp":"2026-02-01T11:39:54.659Z"}
+{"level":"info","message":"Server is running in 4000","timestamp":"2026-02-01T11:39:54.665Z"}
+{"level":"info","message":"Stored refresh token with REFRESHTOKEN_DATA:697edc790e153e34f38de666_51a5dc51-2512-4c4b-b7e5-c5ee094d7f68","timestamp":"2026-02-01T11:40:25.164Z"}
+{"level":"info","message":"Stored refresh token with REFRESHTOKEN_DATA:697edc790e153e34f38de666_30e5d93e-31e8-4850-9745-897c9f4b80dc","timestamp":"2026-02-01T11:47:24.293Z"}
+{"level":"info","message":"Database is connected successfully","timestamp":"2026-02-01T12:24:55.557Z"}
+{"level":"info","message":"Redis connecting...","timestamp":"2026-02-01T12:24:55.969Z"}
+{"level":"info","message":"Redis ready","timestamp":"2026-02-01T12:24:56.259Z"}
+{"level":"info","message":"All Db's are connected successfully","timestamp":"2026-02-01T12:24:56.260Z"}
+{"level":"info","message":"Server is running in 4000","timestamp":"2026-02-01T12:24:56.268Z"}
+{"level":"info","message":"Database is connected successfully","timestamp":"2026-02-01T12:27:42.359Z"}
+{"level":"info","message":"Redis connecting...","timestamp":"2026-02-01T12:27:42.678Z"}
+{"level":"info","message":"Redis ready","timestamp":"2026-02-01T12:27:42.986Z"}
+{"level":"info","message":"All Db's are connected successfully","timestamp":"2026-02-01T12:27:42.988Z"}
+{"level":"info","message":"Server is running in 4000","timestamp":"2026-02-01T12:27:42.995Z"}
+{"level":"info","message":"Database is connected successfully","timestamp":"2026-02-01T12:29:16.312Z"}
+{"level":"info","message":"Redis connecting...","timestamp":"2026-02-01T12:29:16.605Z"}
+{"level":"info","message":"Redis ready","timestamp":"2026-02-01T12:29:16.895Z"}
+{"level":"info","message":"All Db's are connected successfully","timestamp":"2026-02-01T12:29:16.898Z"}
+{"level":"info","message":"Server is running in 4000","timestamp":"2026-02-01T12:29:16.911Z"}
+{"level":"info","message":"Database is connected successfully","timestamp":"2026-02-01T12:29:33.012Z"}
+{"level":"info","message":"Redis connecting...","timestamp":"2026-02-01T12:29:33.308Z"}
+{"level":"info","message":"Redis ready","timestamp":"2026-02-01T12:29:33.529Z"}
+{"level":"info","message":"All Db's are connected successfully","timestamp":"2026-02-01T12:29:33.530Z"}
+{"level":"info","message":"Server is running in 4000","timestamp":"2026-02-01T12:29:33.533Z"}
+{"level":"info","message":"Database is connected successfully","timestamp":"2026-02-01T12:34:18.883Z"}
+{"level":"info","message":"Redis connecting...","timestamp":"2026-02-01T12:34:19.296Z"}
+{"level":"info","message":"Redis ready","timestamp":"2026-02-01T12:34:19.609Z"}
+{"level":"info","message":"All Db's are connected successfully","timestamp":"2026-02-01T12:34:19.611Z"}
+{"level":"info","message":"Server is running in 4000","timestamp":"2026-02-01T12:34:19.620Z"}
+{"level":"info","message":"Database is connected successfully","timestamp":"2026-02-01T12:34:36.083Z"}
+{"level":"info","message":"Redis connecting...","timestamp":"2026-02-01T12:34:36.397Z"}
+{"level":"info","message":"Redis ready","timestamp":"2026-02-01T12:34:36.705Z"}
+{"level":"info","message":"All Db's are connected successfully","timestamp":"2026-02-01T12:34:36.706Z"}
+{"level":"info","message":"Server is running in 4000","timestamp":"2026-02-01T12:34:36.709Z"}
+{"level":"info","message":"Database is connected successfully","timestamp":"2026-02-01T12:36:11.038Z"}
+{"level":"info","message":"Redis connecting...","timestamp":"2026-02-01T12:36:11.430Z"}
+{"level":"info","message":"Redis ready","timestamp":"2026-02-01T12:36:11.651Z"}
+{"level":"info","message":"All Db's are connected successfully","timestamp":"2026-02-01T12:36:11.653Z"}
+{"level":"info","message":"Server is running in 4000","timestamp":"2026-02-01T12:36:11.659Z"}
+{"level":"info","message":"Database is connected successfully","timestamp":"2026-02-01T13:26:43.343Z"}

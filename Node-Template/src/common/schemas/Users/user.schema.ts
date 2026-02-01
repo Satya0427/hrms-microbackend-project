@@ -92,7 +92,8 @@ const USER_SCHEMA = new Schema<IUser>(
             enum: [
                 "ORGANIZATION",
                 "PLATFORM",
-            ]
+            ],
+            default: "ORGANIZATION"
         },
 
         organization_id: {
