@@ -5,25 +5,35 @@ import { z } from 'zod';
  */
 
 // Feature Object Schema
-const featureSchema = z.object({
+export const featureSchema = z.object({
     name: z
         .string()
-        .min(1, 'Feature name is required')
-        .max(100, 'Feature name cannot exceed 100 characters'),
+        .min(3, 'Feature name must be at least 3 characters')
+        .max(100, 'Feature name cannot exceed 100 characters')
+        .trim(),
 
     code: z
         .string()
-        .min(1, 'Feature code is required')
+        .min(2, 'Feature code must be at least 2 characters')
         .max(50, 'Feature code cannot exceed 50 characters')
-        .toUpperCase(),
+        .regex(/^[A-Z0-9_]+$/, 'Feature code must contain only uppercase letters, numbers, and underscores')
+        .toUpperCase()
+        .trim(),
 
     route_path: z
         .string()
         .min(1, 'Route path is required')
-        .max(250, 'Route path cannot exceed 250 characters'),
+        .max(250, 'Route path cannot exceed 250 characters')
+        .trim(),
 
-    active: z.boolean().default(true)
+    icon: z
+        .string()
+        .max(50, 'Icon name cannot exceed 50 characters')
+        .optional(),
+
+    is_active: z.boolean().default(true)
 });
+
 
 // Create Module Features Schema
 export const createModuleFeaturesSchema = z.object({
@@ -36,8 +46,9 @@ export const createModuleFeaturesSchema = z.object({
 
         module_code: z
             .string()
-            .min(1, 'Module code is required')
+            .min(2, 'Module code must be at least 2 characters')
             .max(50, 'Module code cannot exceed 50 characters')
+            .regex(/^[A-Z0-9_]+$/, 'Module code must contain only uppercase letters, numbers, and underscores')
             .toUpperCase()
             .trim(),
 
@@ -46,18 +57,25 @@ export const createModuleFeaturesSchema = z.object({
             .max(250, 'Description cannot exceed 250 characters')
             .optional(),
 
-        active: z.boolean().default(true),
-
         icon: z
             .string()
             .max(50, 'Icon name cannot exceed 50 characters')
             .optional(),
+
+        display_order: z
+            .number()
+            .int()
+            .min(0, 'Display order cannot be negative')
+            .optional(),
+
+        is_active: z.boolean().default(true),
 
         features: z
             .array(featureSchema)
             .min(1, 'At least one feature is required')
     })
 });
+
 
 // Get Module Features By ID Schema
 export const getModuleFeaturesSchema = z.object({

@@ -146,8 +146,7 @@ const newCreateorgAdminAPIHandler = async_error_handler(async (req: CustomReques
         phone_number,
         address,
         organization_id,
-        user_type: 'ORG_ADMIN',
-        role: 'GLOBAL_ADMIN',
+        user_type: 'ORGANIZATION',
         status: 'ACTIVE',
         is_active: true,
         is_deleted: false,
@@ -218,7 +217,7 @@ const getorgAdminDetailsByIdHandler = async_error_handler(async (req: CustomRequ
     }
     const orgAdmin = await USERS_MODEL.findOne({
         _id: adminId,
-        user_type: 'ORG_ADMIN',
+        user_type: 'ORGANIZATION',
         is_deleted: false
     }).select('-password');
     if (!orgAdmin) {
@@ -244,7 +243,7 @@ const getOrgAdminListAPIHandler = async_error_handler(async (req: CustomRequest,
     const skip = (page - 1) * limit;
     //  MATCH STAGE (User level)
     const matchStage: any = {
-        user_type: 'ORG_ADMIN',
+        user_type: 'ORGANIZATION',
         is_deleted: false
     };
     if (search_key) {

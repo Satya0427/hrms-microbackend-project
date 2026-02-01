@@ -82,18 +82,27 @@ const loginAPIHandler = async_error_handler(async (req: CustomRequest, res: Resp
         email: userDetails.email,
         phone_number: userDetails.phone_number,
         address: userDetails.address,
-        user_type: userDetails.user_type
+        user_type: userDetails.user_type,
+        scope: userDetails.scope,
+        organization_id: userDetails?.organization_id
+    }
+    const user_details = {
+        email: userDetails.email,
+        phone_number: userDetails.phone_number,
+        user_type: userDetails.user_type,
+        scope: userDetails.scope,
+        organization_id: userDetails?.organization_id
     }
 
     const { accessToken, refreshToken } = await storeTokens(payload);
     res.cookie(cookieName, refreshToken, cookieOptions);
-    res.status(200).json({ sts: 200, msg: MESSAGES.SUCCESS, token: { accessToken } });
+    res.status(200).json({ sts: 200, msg: MESSAGES.SUCCESS, data: { user_details, token: { accessToken, user_details } } });
 });
 
 // Refresh Token API Call
 const refreshTokenApiHandler = async_error_handler(async (req: CustomRequest, res: Response) => {
     const userDetails = req.user;
-    
+
     if (!userDetails?.user_id || !userDetails?.session_id) {
         res.status(401).json(apiResponse(401, MESSAGES.REFRESH_TOKEN_INVALID));
         return;

@@ -1,4 +1,22 @@
-import { Schema, model } from "mongoose";
+import mongoose, { Schema, Types, model } from "mongoose";
+
+export type RoleScope = "PLATFORM" | "ORGANIZATION";
+export interface IUserRoleMapping {
+  _id?: Types.ObjectId;
+  user_id: Types.ObjectId;
+  role_code: string;
+  scope: RoleScope;
+  organization_id?: Types.ObjectId;
+  is_primary: boolean;
+  is_active: boolean;
+  valid_from: Date;
+  valid_to?: Date;
+  assigned_by?: Types.ObjectId;
+  reason?: string;
+  metadata: Record<string, any>;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
 
 const USER_ROLE_MAPPING_SCHEMA = new Schema(
   {
@@ -18,7 +36,7 @@ const USER_ROLE_MAPPING_SCHEMA = new Schema(
       maxlength: [30, "Role code cannot exceed 30 characters"]
     },
 
-    scope: {
+    user_type: {
       type: String,
       required: [true, "Role scope is required"],
       enum: {
@@ -77,3 +95,12 @@ const USER_ROLE_MAPPING_SCHEMA = new Schema(
     timestamps: true
   }
 );
+
+
+const MAPPING_ROLE_USER_MODEL = mongoose.model<IUserRoleMapping>(
+  "mapping_role_user",
+  USER_ROLE_MAPPING_SCHEMA,
+  "mapping_role_user"
+);
+
+export { MAPPING_ROLE_USER_MODEL };

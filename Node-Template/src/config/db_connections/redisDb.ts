@@ -8,13 +8,16 @@ import {
     generateAccessToken,
     generateRefreshToken
 } from '../../common/utils/token_methods';
+import { Types } from 'mongoose';
 
 interface UserDetails {
     user_id: string;
     email: string;
     phone_number?: string;
     address?: string;
-    user_type: string;
+    user_type?: string;
+    scope?: string;
+    organization_id?: Types.ObjectId
 }
 
 interface TokenPair {
@@ -46,17 +49,17 @@ async function redis_connection(): Promise<RedisClientType> {
             console.error("Redis Client Error:", err);
             logger.error("Redis Client Error: " + (err && err.message));
         });
-        
+
         redisClient.on("connect", () => {
             console.info("Redis connecting...");
             logger.info("Redis connecting...");
         });
-        
+
         redisClient.on("ready", () => {
             console.info("Redis ready");
             logger.info("Redis ready");
         });
-        
+
         redisClient.on("reconnecting", () => {
             console.info("Redis reconnecting");
             logger.info("Redis reconnecting");
@@ -81,7 +84,7 @@ const storeTokens = async (userDetails: UserDetails): Promise<TokenPair> => {
     if (!redisClient || !redisClient.isOpen) {
         throw new Error("Redis client is not connected. Call redis_connection() first.");
     }
-    
+
     const session_id = uuidv4();
 
     const accessToken = await generateAccessToken(userDetails.user_id, session_id);
@@ -90,13 +93,13 @@ const storeTokens = async (userDetails: UserDetails): Promise<TokenPair> => {
     const key = `REFRESHTOKEN_DATA:${userDetails.user_id}_${session_id}`;
     const value = hashToken(refreshToken);
     const REFRESH_TOKEN_TTL = Number(env.REFRESH_TOKEN_EXPIRES_SEC)
-    
+
     try {
         const storedData: StoredTokenData = {
             userDetails,
             refreshToken: value,
         };
-        
+
         await redisClient.setEx(key, REFRESH_TOKEN_TTL, JSON.stringify(storedData));
         logger.info(`Stored refresh token with REFRESHTOKEN_DATA:${userDetails.user_id}_${session_id}`);
         return { accessToken, refreshToken };
@@ -136,11 +139,11 @@ async function isRefreshTokenInRedis(userId: string, session_id: string, refresh
     }
     const key = `REFRESHTOKEN_DATA:${userId}_${session_id}`;
     const stored = await redisClient.get(key);
-    
+
     if (!stored) {
         return false;
     }
-    
+
     const data: StoredTokenData = JSON.parse(stored);
     return data.refreshToken === hashToken(refreshToken);
 }

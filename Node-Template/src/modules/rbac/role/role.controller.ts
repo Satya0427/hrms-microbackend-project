@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { async_error_handler } from '../../../common/utils/async_error_handler';
 import { apiResponse, apiDataResponse } from '../../../common/utils/api_response';
 import { MESSAGES } from '../../../common/utils/messages';
-import { ROLE_MODEL } from '../../../common/schemas/Users/role.schema';
+import { ROLES_MODEL } from '../../../common/schemas/rcab/roles.schema';
 import { validateRoleCreate } from './role.validator';
 
 interface CustomRequest extends Request {
@@ -47,7 +47,7 @@ const createRoleAPIHandler = async_error_handler(async (req: CustomRequest, res:
     role_name = role_name.trim();
     role_code = role_code.trim().toUpperCase();
 
-    const existingRole = await ROLE_MODEL.findOne({
+    const existingRole = await ROLES_MODEL.findOne({
         role_code,
         is_deleted: false
     });
@@ -57,7 +57,7 @@ const createRoleAPIHandler = async_error_handler(async (req: CustomRequest, res:
         return;
     }
 
-    const role = await ROLE_MODEL.create({
+    const role = await ROLES_MODEL.create({
         role_name,
         role_code,
         description,
@@ -76,7 +76,7 @@ const createRoleAPIHandler = async_error_handler(async (req: CustomRequest, res:
 const getRoleByIdAPIHandler = async_error_handler(async (req: CustomRequest, res: Response) => {
     const { roleId } = req.params;
 
-    const role = await ROLE_MODEL.findOne({
+    const role = await ROLES_MODEL.findOne({
         _id: roleId,
         is_deleted: false
     });
@@ -103,12 +103,12 @@ const listRolesAPIHandler = async_error_handler(async (req: CustomRequest, res: 
     if (scope) query.scope = scope;
     if (organization_id) query.organization_id = organization_id;
 
-    const roles = await ROLE_MODEL.find(query)
+    const roles = await ROLES_MODEL.find(query)
         .skip((page - 1) * limit)
         .limit(limit)
         .sort({ createdAt: -1 });
 
-    const total = await ROLE_MODEL.countDocuments(query);
+    const total = await ROLES_MODEL.countDocuments(query);
 
     res.status(200).json(
         apiDataResponse(200, MESSAGES.SUCCESS, {
@@ -126,7 +126,7 @@ const listRolesAPIHandler = async_error_handler(async (req: CustomRequest, res: 
 const updateRoleAPIHandler = async_error_handler(async (req: CustomRequest, res: Response) => {
     const { roleId } = req.params;
 
-    const updatedRole = await ROLE_MODEL.findOneAndUpdate(
+    const updatedRole = await ROLES_MODEL.findOneAndUpdate(
         { _id: roleId, is_deleted: false },
         { ...req.body, updated_by: req.user?.user_id },
         { new: true }
@@ -152,7 +152,7 @@ const updateRoleStatusAPIHandler = async_error_handler(async (req: CustomRequest
         return;
     }
 
-    const updatedRole = await ROLE_MODEL.findOneAndUpdate(
+    const updatedRole = await ROLES_MODEL.findOneAndUpdate(
         { _id: roleId, is_deleted: false },
         { is_active, updated_by: req.user?.user_id },
         { new: true }
