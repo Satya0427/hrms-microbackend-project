@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import logger from '../../config/logger';
 import { MESSAGES } from './messages';
+import { LOOKUP_MODEL } from '../schemas/lookups/lookup.schema';
 
 /* Encrypt/Hash Password */
 async function encryptPassword(password: string): Promise<string> {
@@ -24,4 +25,30 @@ async function verifyPassword(input_password: string, encrypted_password: string
     }
 }
 
-export { encryptPassword, verifyPassword };
+const getLookupsByCategory = async (req: any, res: any) => {
+    const { category_code } = req.params;
+    const organization_id = req.user?.organization_id; // optional
+
+    const lookups = await LOOKUP_MODEL.find({
+        category_code: category_code.toUpperCase(),
+        is_active: true,
+        is_deleted: false,
+        $or: [
+            { scope: "PLATFORM" },
+            {
+                scope: "ORGANIZATION",
+                organization_id
+            }
+        ]
+    })
+        .sort({ sort_order: 1 })
+        .select("lookup_key lookup_value -_id");
+
+    res.status(200).json({
+        success: true,
+        data: lookups
+    });
+};
+
+
+export { encryptPassword, verifyPassword, getLookupsByCategory};

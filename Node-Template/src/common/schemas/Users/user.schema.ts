@@ -188,8 +188,8 @@ const USER_SCHEMA = new Schema<IUser>(
 );
 
 // Indexes
-USER_SCHEMA.index({ employee_id: 1 });
-USER_SCHEMA.index({ email: 1 });
-USER_SCHEMA.index({ organization_id: 1 });
+// USER_SCHEMA.index({ employee_id: 1 });
+// USER_SCHEMA.index({ email: 1 });
+// USER_SCHEMA.index({ organization_id: 1 });
 
 export const USERS_MODEL = mongoose.model<IUser>("users", USER_SCHEMA);

@@ -1,46 +1,77 @@
-import { Request, Response } from 'express';
-import { async_error_handler } from '../../utils/async_error_handler';
-import { apiDataResponse } from '../../utils/api_response';
-import { MESSAGES } from '../../utils/messages';
-import { ORGANIZATION_MODEL } from '../../schemas/Organizations/organization.schema';
-import { safeValidate } from '../../utils/validation_middleware';
-import { organizationsDropdownSchema } from './lookup.validator';
+import { async_error_handler } from "../../../common/utils/async_error_handler";
+import { LOOKUP_MODEL } from "../../../common/schemas/lookups/lookup.schema";
+import { apiDataResponse, apiResponse } from "../../../common/utils/api_response";
 
-interface CustomRequest extends Request {
-    user?: any;
-    validatedBody?: any;
-}
+const getLookupsByCategory = async (req: any, res: any) => {
+    const { category_code } = req.params;
+    const organization_id = req.user?.organization_id; // optional
 
-//  GET ORGANIZATIONS FOR DROPDOWN (Without Pagination)
-const getOrganizationsDropdownAPIHandler = async_error_handler(async (req: CustomRequest, res: Response) => {
-    const validation = safeValidate(organizationsDropdownSchema, req.body);
-    if (!validation.success) {
-        res.status(400).json(
-            apiDataResponse(400, 'Validation failed', validation.errors?.[0]?.message)
+    const lookups = await LOOKUP_MODEL.find({
+        category_code: category_code.toUpperCase(),
+        is_active: true,
+        is_deleted: false,
+    })
+        .sort({ sort_order: 1 })
+        .select("lookup_key lookup_value -_id");
+
+    res.status(200).json(apiDataResponse(200, 'Success', lookups));
+};
+
+const getBulkLookups = async_error_handler(async (req: any, res: any) => {
+    try {
+        const { categories } = req.body;
+
+        // ===== Validate Input =====
+        if (!Array.isArray(categories) || categories.length === 0) {
+            return res.status(400).json(apiResponse(400, "categories array is required"));
+        }
+
+        // Normalize categories
+        const normalizedCategories = categories.map((c: string) =>
+            c.trim().toUpperCase()
         );
-        return;
-    }
-    const { search_key } = validation.data || {};
-    const query: any = { is_deleted: false, is_active: true };
-    if (search_key) {
-        query.$or = [
-            { 'organization.organization_name': { $regex: search_key, $options: "i" } }
-        ];
-    }
 
-    // Get only organization_name and _id fields
-    const organizations = await ORGANIZATION_MODEL.find(query)
-        .select('organization._id organization.organization_name _id')
-        .sort({ 'organization.organization_name': 1 })
-        .lean();
-    const dropdownData = organizations.map(org => ({
-        org_id: org._id,
-        org_name: org.organization.organization_name
-    }));
+        // ===== Aggregate Lookups =====
+        const lookups = await LOOKUP_MODEL.aggregate([
+            {
+                $match: {
+                    category_code: { $in: normalizedCategories },
+                }
+            },
+            {
+                $sort: { sort_order: 1 }
+            },
+            {
+                $group: {
+                    _id: "$category_code",
+                    values: {
+                        $push: {
+                            lookup_key: "$lookup_key",
+                            lookup_value: "$lookup_value",
+                            is_default: "$is_default",
+                            metadata: "$metadata"
+                        }
+                    }
+                }
+            }
+        ]);
 
-    res.status(200).json(apiDataResponse(200, MESSAGES.SUCCESS, dropdownData));
+        // ===== Transform Response =====
+        const response = lookups.reduce((acc: any, cur: any) => {
+            acc[cur._id] = cur.values;
+            return acc;
+        }, {});
+
+        res.status(200).json(apiDataResponse(200, 'Success', response));
+
+    } catch (error) {
+        console.error("getBulkLookups error:", error);
+        return res.status(500).json(apiResponse(500, "Failed to fetch lookups"));
+    }
 });
 
+
 export {
-    getOrganizationsDropdownAPIHandler
-};
+    getLookupsByCategory,
+    getBulkLookups
+}

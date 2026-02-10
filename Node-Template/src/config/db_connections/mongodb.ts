@@ -1,19 +1,16 @@
-import mongoose from 'mongoose';
-import { env } from '../env';
-import logger from '../logger';
+import mongoose from "mongoose";
+import { env } from "../env";
+import logger from "../logger";
 
-async function server_connection(): Promise<void> {
+export async function server_connection(): Promise<void> {
     try {
         await mongoose.connect(env.MONGO_URI, {
             autoIndex: true
-        } as mongoose.ConnectOptions);
-        
-        console.log('Database is connected successfully');
-        logger.info("Database is connected successfully");
+        });
+
+        logger.info("MongoDB connected successfully");
     } catch (error) {
-        console.log("Database connection failed");
-        logger.error("Database connection failed");
+        logger.error("MongoDB connection failed", error);
+        process.exit(1); // ⬅️ important
     }
 }
-
-export { server_connection };

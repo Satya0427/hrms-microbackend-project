@@ -141,8 +141,8 @@ const SUBSCRIPTION_PLAN_SCHEMA = new Schema<ISubscriptionPlan>(
 );
 
 // ===== Indexes =====
-SUBSCRIPTION_PLAN_SCHEMA.index({ plan_code: 1 });
-SUBSCRIPTION_PLAN_SCHEMA.index({ plan_name: 1 });
+// SUBSCRIPTION_PLAN_SCHEMA.index({ plan_code: 1 });
+// SUBSCRIPTION_PLAN_SCHEMA.index({ plan_name: 1 });
 
 const SUBSCRIPTION_PLAN_MODEL = mongoose.model<ISubscriptionPlan>(
     "subscription_plans",

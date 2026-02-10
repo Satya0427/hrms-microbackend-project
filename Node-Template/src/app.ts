@@ -1,7 +1,7 @@
 import express, { Express, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-
+import './cron-jobs/leaveCredit.cron';
 // module imports
 import mainRoute from './modules/main.router';
 import { wrongRouteErrorCatch, globalErrorCatch } from './common/middleware/error.middleware';

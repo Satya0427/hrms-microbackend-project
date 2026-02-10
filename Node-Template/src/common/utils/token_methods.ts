@@ -9,10 +9,13 @@ interface TokenPayload extends JwtPayload {
 // #region AccessToken
 
 // Access Token Generation
-async function generateAccessToken(user_id: string, session_id: string): Promise<string> {
+async function generateAccessToken(userDetails: any, session_id: string): Promise<string> {
     const accessToken = JWT.sign(
         {
-            user_id: user_id || '',
+            user_id: userDetails.user_id || '',
+            email: userDetails.email || '',
+            user_type: userDetails.user_type || '',
+            organization_id: userDetails.organization_id || '',
             session_id
         },
         env.ACCESS_TOKEN_SECRET,

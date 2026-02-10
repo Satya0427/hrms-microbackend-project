@@ -132,7 +132,7 @@ const ROLE_SCHEMA = new Schema(
 =========================== */
 
 // Unique role code
-ROLE_SCHEMA.index({ role_code: 1 }, { unique: true });
+// ROLE_SCHEMA.index({ role_code: 1 }, { unique: true });
 
 // Organization-level unique role name
 ROLE_SCHEMA.index(

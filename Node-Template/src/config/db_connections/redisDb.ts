@@ -87,7 +87,7 @@ const storeTokens = async (userDetails: UserDetails): Promise<TokenPair> => {
 
     const session_id = uuidv4();
 
-    const accessToken = await generateAccessToken(userDetails.user_id, session_id);
+    const accessToken = await generateAccessToken(userDetails, session_id);
     const refreshToken = await generateRefreshToken(userDetails.user_id, session_id);
 
     const key = `REFRESHTOKEN_DATA:${userDetails.user_id}_${session_id}`;

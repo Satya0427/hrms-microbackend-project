@@ -3,7 +3,7 @@ import mongoose, { Schema, Document, Types } from 'mongoose';
 
 export interface IOrganizationDetails {
     organization_name: string;
-    organization_code:string;
+    organization_code: string;
     domain: string;
     industry?: string;
     country?: string;
@@ -43,7 +43,7 @@ export interface IOrganizationOnboarding {
     createdAt?: Date;
     updatedAt?: Date;
 }
-export const ORGANIZATION_ONBOARDING_SCHEMA = new Schema(
+const ORGANIZATION_ONBOARDING_SCHEMA = new Schema(
     {
         // ================= ORGANIZATION OBJECT =================
         organization: {
@@ -171,7 +171,7 @@ export const ORGANIZATION_ONBOARDING_SCHEMA = new Schema(
         timestamps: true
     }
 );
-ORGANIZATION_ONBOARDING_SCHEMA.index({ organization_code: 1 });
+// ORGANIZATION_ONBOARDING_SCHEMA.index({ organization_code: 1 });
 const ORGANIZATION_MODEL = mongoose.model<IOrganizationOnboarding>(
     "organizations",
     ORGANIZATION_ONBOARDING_SCHEMA,
