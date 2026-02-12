@@ -12,7 +12,11 @@ import {
     listHolidaysAPIHandler,
     deleteHolidayAPIHandler,
     createWeeklyOffAPIHandler,
-    getLeaveBalanceAPIHandler
+    getLeaveBalanceAPIHandler,
+    applyLeaveAPIHandler,
+    checkLeaveOverlapAPIHandler,
+    updateLeaveRequestStatusAPIHandler,
+    listLeaveRequestsAPIHandler
 } from './leave_config.controller';
 
 import { accessTokenValidatorMiddleware } from '../../../common/middleware/error.middleware';
@@ -29,7 +33,12 @@ import {
     listHolidaySchema,
     deleteHolidaySchema,
     createWeeklyOffSchema,
-    getLeaveBalanceSchema
+    getLeaveBalanceSchema,
+    applyLeaveSchema,
+    checkLeaveOverlapSchema,
+    approveLeaveRequestSchema,
+    updateLeaveRequestStatusSchema,
+    listLeaveRequestsSchema
 } from './leave_config.validator';
 
 // Root path /leave-config
@@ -129,6 +138,35 @@ LEAVE_CONFIG_ROUTER.post(
     accessTokenValidatorMiddleware,
     validateRequest(getLeaveBalanceSchema, 'body'),
     getLeaveBalanceAPIHandler
+);
+
+// ==== Leave Request Routes ====
+LEAVE_CONFIG_ROUTER.post(
+    '/leave_requests/apply',
+    accessTokenValidatorMiddleware,
+    validateRequest(applyLeaveSchema, 'body'),
+    applyLeaveAPIHandler
+);
+
+LEAVE_CONFIG_ROUTER.post(
+    '/leave_requests/check_overlap',
+    accessTokenValidatorMiddleware,
+    validateRequest(checkLeaveOverlapSchema, 'body'),
+    checkLeaveOverlapAPIHandler
+);
+
+LEAVE_CONFIG_ROUTER.post(
+    '/leave_requests/update_status',
+    accessTokenValidatorMiddleware,
+    validateRequest(updateLeaveRequestStatusSchema, 'body'),
+    updateLeaveRequestStatusAPIHandler
+);
+
+LEAVE_CONFIG_ROUTER.post(
+    '/leave_requests/get_list',
+    accessTokenValidatorMiddleware,
+    validateRequest(listLeaveRequestsSchema, 'body'),
+    listLeaveRequestsAPIHandler
 );
 
 export default LEAVE_CONFIG_ROUTER;

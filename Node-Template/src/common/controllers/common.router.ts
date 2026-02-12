@@ -1,6 +1,6 @@
 import express, { Router } from 'express';
 import { accessTokenValidatorMiddleware } from '../middleware/error.middleware';
-import { bulkLookupsDropdownSchema, leaveTypesDropdownSchema, lookupsDropdownSchema, organizationsDropdownSchema } from './dropdowns/dropdown.validator';
+import { bulkLookupsDropdownSchema, leaveTypesDropdownSchema, lookupsDropdownSchema, organizationsDropdownSchema, rolesDropdownSchema } from './dropdowns/dropdown.validator';
 import { validateRequest } from '../utils/validation_middleware';
 import { getLookupsByCategory } from '../utils/common';
 import { getBulkLookups } from './lookups/lookup.controller';
@@ -11,6 +11,7 @@ import {
     getEmployeeProfileImage,
     getOrganizationsDropdownAPIHandler,
     getLeaveTypesDropdownAPIHandler,
+    getRolesDropdownAPIHandler,
 } from './dropdowns/dropdown.controller';
 
 const COMMON_ROUTER: Router = express.Router();
@@ -52,6 +53,13 @@ COMMON_ROUTER.get(
     '/leave-types-dropdown',
     accessTokenValidatorMiddleware,
     getLeaveTypesDropdownAPIHandler
+);
+
+// Roles Dropdown (Without pagination)
+COMMON_ROUTER.get(
+    '/roles-dropdown',
+    accessTokenValidatorMiddleware,
+    getRolesDropdownAPIHandler
 );
 
 // Organizations Dropdown (Without pagination)

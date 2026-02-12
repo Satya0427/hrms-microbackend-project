@@ -15,6 +15,8 @@ export interface IEmployeePersonalDetails {
     address?: string;
     maritalStatus?: string;
     nationality?: string;
+    password?: string; // For authentication purposes, if needed
+
 }
 
 export interface IEmployeeJobDetails {
@@ -85,6 +87,10 @@ const EMPLOYEE_PERSONAL_SCHEMA = new Schema(
             trim: true,
             lowercase: true,
             maxlength: [100, "Email cannot exceed 100 characters"]
+        },
+        password: {
+            type: String,
+            minlength: [6, "Password must be at least 6 characters"],
         },
 
         phone: {
@@ -268,7 +274,6 @@ const EMPLOYEE_PROFILE_SCHEMA = new Schema(
             type: EMPLOYEE_PERSONAL_SCHEMA,
             required: true
         },
-
         job_details: {
             type: EMPLOYEE_JOB_SCHEMA,
             required: true

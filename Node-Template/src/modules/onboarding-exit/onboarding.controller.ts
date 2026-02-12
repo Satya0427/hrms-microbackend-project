@@ -11,6 +11,7 @@ import { ORGANIZATION_MODEL } from '../../common/schemas/Organizations/organizat
 import { getGridFSBucket } from "../../config/db_connections/gridfs";
 import { EMPLOYEE_DOCUMENT_MODEL } from '../../common/schemas/Employees/employee_documents.schema';
 import { EMPLOYEE_COMPENSATION_MODEL } from '../../common/schemas/Employees/employee_compensiation.schema';
+import { encryptPassword } from '../../common/utils/common';
 interface CustomRequest extends Request {
   user?: {
     user_id: string;
@@ -144,6 +145,10 @@ const createEmployeeOnboardingAPIHandler = async_error_handler(async (req: Custo
     profileImageId = uploadStream.id;
   }
 
+  // PASSWORD (ONLY IF PRESENT)
+  if (personal_details.password) {
+    personal_details.password = await encryptPassword(personal_details.password);
+  }
   /* ================= 5. CREATE / UPDATE EMPLOYEE ================= */
   const employeePayload = {
     organization_id,
@@ -476,56 +481,56 @@ const saveEmployeeCompensationAPIHandler = async_error_handler(async (req: Custo
 // ==================== GET EMPLOYEE COMPENSATION ====================
 const getEmployeeCompensationAPIHandler = async_error_handler(async (req: CustomRequest, res: Response) => {
 
-    const { employee_uuid } = req.params;
-    const organization_id = req.user?.organization_id;
+  const { employee_uuid } = req.params;
+  const organization_id = req.user?.organization_id;
 
-    if (!organization_id) {
-      res.status(400).json(apiResponse(400, "Organization Id Required"));
-      return
-    }
-
-    if (!employee_uuid) {
-      res.status(400).json(apiResponse(400, "Employee UUID is required"));
-      return
-    }
-
-    /* ================= 1. VALIDATE OBJECT ID ================= */
-    if (!Types.ObjectId.isValid(employee_uuid)) {
-      res.status(400).json(apiResponse(400, "Invalid Employee UUID format"));
-      return
-    }
-
-    const employeeObjectId = new Types.ObjectId(employee_uuid);
-
-    /* ================= 2. CHECK EMPLOYEE EXISTS ================= */
-    const employeeExists = await EMPLOYEE_PROFILE_MODEL.findOne({
-      _id: employeeObjectId,
-      organization_id,
-      is_deleted: false,
-    }).lean();
-
-    if (!employeeExists) {
-      res.status(404).json(apiResponse(404, "Employee not found"));
-      return
-    }
-
-    /* ================= 3. FETCH ACTIVE COMPENSATION ================= */
-    const compensation = await EMPLOYEE_COMPENSATION_MODEL.findOne({
-      employee_uuid: employeeObjectId,
-      organization_id,
-      is_active: true,
-    })
-      .sort({ effective_from: -1 })
-      .lean();
-
-    if (!compensation) {
-      res.status(404).json(apiResponse(404, "Employee compensation not found"));
-      return
-    }
-
-    /* ================= 4. RESPONSE ================= */
-    res.status(200).json(apiDataResponse(200, "Employee compensation fetched successfully", compensation));
+  if (!organization_id) {
+    res.status(400).json(apiResponse(400, "Organization Id Required"));
+    return
   }
+
+  if (!employee_uuid) {
+    res.status(400).json(apiResponse(400, "Employee UUID is required"));
+    return
+  }
+
+  /* ================= 1. VALIDATE OBJECT ID ================= */
+  if (!Types.ObjectId.isValid(employee_uuid)) {
+    res.status(400).json(apiResponse(400, "Invalid Employee UUID format"));
+    return
+  }
+
+  const employeeObjectId = new Types.ObjectId(employee_uuid);
+
+  /* ================= 2. CHECK EMPLOYEE EXISTS ================= */
+  const employeeExists = await EMPLOYEE_PROFILE_MODEL.findOne({
+    _id: employeeObjectId,
+    organization_id,
+    is_deleted: false,
+  }).lean();
+
+  if (!employeeExists) {
+    res.status(404).json(apiResponse(404, "Employee not found"));
+    return
+  }
+
+  /* ================= 3. FETCH ACTIVE COMPENSATION ================= */
+  const compensation = await EMPLOYEE_COMPENSATION_MODEL.findOne({
+    employee_uuid: employeeObjectId,
+    organization_id,
+    is_active: true,
+  })
+    .sort({ effective_from: -1 })
+    .lean();
+
+  if (!compensation) {
+    res.status(404).json(apiResponse(404, "Employee compensation not found"));
+    return
+  }
+
+  /* ================= 4. RESPONSE ================= */
+  res.status(200).json(apiDataResponse(200, "Employee compensation fetched successfully", compensation));
+}
 );
 
 

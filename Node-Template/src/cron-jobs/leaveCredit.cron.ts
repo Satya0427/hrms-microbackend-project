@@ -4,7 +4,7 @@ import { LEAVE_POLICY_MODEL } from '../common/schemas/leave-attendance/leave-con
 import { EMPLOYEE_PROFILE_MODEL } from '../common/schemas/Employees/employee_onboarding.schema';
 import { LEAVE_LEDGER_MODEL } from '../common/schemas/leave-attendance/leave-configs/leave-ledger.schema';
 
-cron.schedule('*/5 * * * * *', async () => {
+cron.schedule('*/2 * * * *', async () => {
     console.log(' Leave Credit Cron Started');
 
     const today = new Date();

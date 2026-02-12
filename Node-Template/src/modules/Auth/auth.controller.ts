@@ -11,6 +11,7 @@ import {
     isRefreshTokenInRedis,
     UserDetails
 } from '../../config/db_connections/redisDb';
+import { EMPLOYEE_PROFILE_MODEL } from '../../common/schemas/Employees/employee_onboarding.schema';
 
 interface CustomRequest extends Request {
     user?: {
@@ -65,30 +66,30 @@ const loginAPIHandler = async_error_handler(async (req: CustomRequest, res: Resp
     email = email.trim();
     password = password.trim();
 
-    const userDetails = await USERS_MODEL.findOne({ email: email });
+    const userDetails:any = await EMPLOYEE_PROFILE_MODEL.findOne({ "personal_details.email": email });
     if (!userDetails) {
         res.status(400).json(apiResponse(400, 'Please check UserID and Password'));
         return;
     }
 
-    const isPasswordMatch = await verifyPassword(password, userDetails?.password);
+    const isPasswordMatch = await verifyPassword(password, userDetails?.personal_details.password);
     if (!isPasswordMatch) {
         res.status(500).json(apiResponse(400, `Wrong Password`));
         return;
     }
 
-    const payload: UserDetails = {
+    const payload:any = {
         user_id: userDetails._id.toString(),
-        email: userDetails.email,
-        phone_number: userDetails.phone_number,
-        address: userDetails.address,
+        email: userDetails.personal_details.email,
+        phone_number: userDetails.personal_details.phone,
+        address: userDetails.personal_details.address,
         user_type: userDetails.user_type,
         scope: userDetails.scope,
         organization_id: userDetails?.organization_id
     }
     const user_details = {
-        email: userDetails.email,
-        phone_number: userDetails.phone_number,
+        email: userDetails.personal_details.email,
+        phone_number: userDetails.personal_details.phone,
         user_type: userDetails.user_type,
         scope: userDetails.scope,
         organization_id: userDetails?.organization_id

@@ -22,7 +22,8 @@ export const employeePersonalSchema = z.object({
   gender: z.string(),
   address: z.string().max(250).optional(),
   maritalStatus: z.string().max(30).optional(),
-  nationality: z.string().max(50).optional()
+  nationality: z.string().max(50).optional(),
+  password: z.string().min(6).max(100).optional()
 });
 
 /* ================= JOB DETAILS ================= */

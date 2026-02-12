@@ -7,6 +7,7 @@ import { LEAVE_TYPE_MODEL } from '../../../common/schemas/leave-attendance/leave
 import { LEAVE_POLICY_MODEL } from '../../../common/schemas/leave-attendance/leave-configs/leave-policies.schema';
 import { LEAVE_CALENDAR_MODEL } from '../../../common/schemas/leave-attendance/leave-configs/leave-calendar.schema';
 import { LEAVE_LEDGER_MODEL } from '../../../common/schemas/leave-attendance/leave-configs/leave-ledger.schema';
+import { LEAVE_REQUEST_MODEL } from '../../../common/schemas/leave-attendance/leave-configs/leave-requests.schema';
 import { EMPLOYEE_PROFILE_MODEL } from '../../../common/schemas/Employees/employee_onboarding.schema';
 import { safeValidate } from '../../../common/utils/validation_middleware';
 import {
@@ -21,7 +22,12 @@ import {
     listHolidaySchema,
     deleteHolidaySchema,
     createWeeklyOffSchema,
-    getLeaveBalanceSchema
+    getLeaveBalanceSchema,
+    applyLeaveSchema,
+    checkLeaveOverlapSchema,
+    approveLeaveRequestSchema,
+    updateLeaveRequestStatusSchema,
+    listLeaveRequestsSchema
 } from './leave_config.validator';
 
 interface CustomRequest extends Request {
@@ -758,8 +764,229 @@ const calculateAccruedCredits = (
     return credits;
 };
 
-const getLeaveBalanceAPIHandler = async_error_handler(async (req: CustomRequest, res: Response) => {
-    const validation = safeValidate(getLeaveBalanceSchema, { body: req.body });
+
+//#endregion
+
+
+const calculateRequestedDays = (fromDate: Date, toDate: Date, halfDay: boolean): number => {
+    const msPerDay = 24 * 60 * 60 * 1000;
+    const diffDays = Math.floor((toDate.getTime() - fromDate.getTime()) / msPerDay) + 1;
+    return halfDay ? 0.5 : diffDays;
+};
+
+
+const getLeaveBalanceAPIHandler = async_error_handler(
+    async (req: CustomRequest, res: Response) => {
+
+        const validation = safeValidate(getLeaveBalanceSchema, { body: req.body });
+        if (!validation.success) {
+            res.status(400).json(
+                apiDataResponse(400, 'Validation failed', validation.errors?.[0]?.message)
+            );
+            return;
+        }
+
+        const organization_id = req.user?.organization_id
+
+        if (!organization_id) {
+            res.status(400).json(apiResponse(400, 'Organization id is required'));
+            return;
+        }
+
+        let { employee_id, as_of_date } = validation.data?.body || {};
+        const asOfDate = as_of_date ? new Date(as_of_date) : new Date();
+
+        if (!employee_id) {
+            employee_id = req.user?.user_id;
+        }
+
+        if (!employee_id) {
+            res.status(400).json(apiResponse(400, 'Employee id is required'));
+            return;
+        }
+
+        /**
+         * ----------------------------------------
+         * 1️⃣ Fetch Employee
+         * ----------------------------------------
+         */
+        const employee = await EMPLOYEE_PROFILE_MODEL.findOne({
+            _id: new Types.ObjectId(employee_id),
+            organization_id: new Types.ObjectId(organization_id),
+            is_deleted: false
+        });
+
+        if (!employee) {
+            res.status(404).json(apiResponse(404, 'Employee not found'));
+            return;
+        }
+
+        /**
+         * ----------------------------------------
+         * 2️⃣ Fetch Active Leave Policy
+         * ----------------------------------------
+         */
+        const policy = await LEAVE_POLICY_MODEL.findOne({
+            organization_id: new Types.ObjectId(organization_id),
+            status: 'ACTIVE',
+            effective_from: { $lte: asOfDate },
+            $or: [
+                { effective_to: { $gte: asOfDate } },
+                { effective_to: { $exists: false } },
+                { effective_to: null }
+            ]
+        }).sort({ effective_from: -1 });
+
+        if (!policy) {
+            res.status(404).json(apiResponse(404, 'Active leave policy not found'));
+            return;
+        }
+
+        /**
+         * ----------------------------------------
+         * 3️⃣ Check Applicability
+         * ----------------------------------------
+         */
+        const employeeType = employee?.job_details?.employmentType?.toUpperCase();
+        const employeeGender = employee?.personal_details?.gender?.toUpperCase();
+        const employeeMaritalStatus = employee?.personal_details?.maritalStatus?.toUpperCase();
+
+        const applicability: any = policy.applicability || {};
+
+        if (
+            (applicability.employee_type &&
+                applicability.employee_type !== 'ALL' &&
+                applicability.employee_type !== employeeType) ||
+            (applicability.gender &&
+                applicability.gender !== 'ALL' &&
+                applicability.gender !== employeeGender) ||
+            (applicability.marital_status &&
+                applicability.marital_status !== 'ALL' &&
+                applicability.marital_status !== employeeMaritalStatus)
+        ) {
+            res.status(200).json(
+                apiDataResponse(200, MESSAGES.SUCCESS, {
+                    summary: { total_balance: 0, total_credits: 0, total_used: 0 },
+                    balances: []
+                })
+            );
+            return;
+        }
+
+        /**
+         * ----------------------------------------
+         * 4️⃣ Prepare Leave Types
+         * ----------------------------------------
+         */
+        const leaveTypeIds = policy.leave_rules.map(
+            (rule: any) => rule.leave_type_id
+        );
+
+        const leaveTypes = await LEAVE_TYPE_MODEL.find({
+            _id: { $in: leaveTypeIds }
+        }).lean();
+
+        const leaveTypeMap = new Map(
+            leaveTypes.map((lt) => [String(lt._id), lt])
+        );
+
+        const balances: any[] = [];
+        let totalCredits = 0;
+        let totalUsed = 0;
+
+        /**
+         * ----------------------------------------
+         * 5️⃣ Loop Through Leave Rules
+         * ----------------------------------------
+         */
+        for (const rule of policy.leave_rules) {
+
+            const leaveType = leaveTypeMap.get(String(rule.leave_type_id));
+
+            const ledgerTotals = await LEAVE_LEDGER_MODEL.aggregate([
+                {
+                    $match: {
+                        organization_id: new Types.ObjectId(organization_id),
+                        employee_uuid: new Types.ObjectId(employee._id),
+                        leave_type_id: new Types.ObjectId(rule.leave_type_id),
+                        effective_date: { $lte: asOfDate }
+                    }
+                },
+                {
+                    $group: {
+                        _id: '$entry_type',
+                        total: { $sum: '$quantity' }
+                    }
+                }
+            ]);
+
+            const totals = ledgerTotals.reduce(
+                (acc: Record<string, number>, row: any) => {
+                    acc[row._id] = row.total;
+                    return acc;
+                },
+                {}
+            );
+
+            const ledgerCredits = totals.CREDIT ?? 0;
+            const ledgerDebits = totals.DEBIT ?? 0;
+            const ledgerReversals = totals.REVERSAL ?? 0;
+
+            /**
+             * 🔒 STRICT RULE:
+             * If no CREDIT exists → everything is 0
+             */
+            if (ledgerCredits <= 0) {
+                balances.push({
+                    leave_type_id: rule.leave_type_id,
+                    leave_type_name: leaveType?.name || null,
+                    leave_type_code: leaveType?.code || null,
+                    credited: 0,
+                    used: 0,
+                    balance: 0
+                });
+                continue;
+            }
+
+            const credit = ledgerCredits;
+            const used = Math.max(0, ledgerDebits - ledgerReversals);
+            const balance = Math.max(0, credit - used);
+
+            totalCredits += credit;
+            totalUsed += used;
+
+            balances.push({
+                leave_type_id: rule.leave_type_id,
+                leave_type_name: leaveType?.name || null,
+                leave_type_code: leaveType?.code || null,
+                credited: credit,
+                used,
+                balance
+            });
+        }
+
+        /**
+         * ----------------------------------------
+         * 6️⃣ Final Response
+         * ----------------------------------------
+         */
+        console.log('Total Credits:', totalCredits, 'Total Used:', totalUsed);
+        res.status(200).json(
+            apiDataResponse(200, MESSAGES.SUCCESS, {
+                summary: {
+                    total_balance: Math.max(0, totalCredits - totalUsed),
+                    total_credits: totalCredits,
+                    total_used: totalUsed
+                },
+                balances
+            })
+        );
+    }
+);
+
+// ======== CHECK LEAVE OVERLAP API HANDLER ==========
+const checkLeaveOverlapAPIHandler = async_error_handler(async (req: CustomRequest, res: Response) => {
+    const validation = safeValidate(checkLeaveOverlapSchema, { body: req.body });
     if (!validation.success) {
         res.status(400).json(apiDataResponse(400, 'Validation failed', validation.errors?.[0]?.message));
         return;
@@ -771,8 +998,63 @@ const getLeaveBalanceAPIHandler = async_error_handler(async (req: CustomRequest,
         return;
     }
 
-    const { employee_id, as_of_date } = validation.data?.body || { employee_id: '' };
-    const asOfDate = as_of_date ? new Date(as_of_date) : new Date();
+    const { employee_id, from_date, to_date } = validation.data?.body || {};
+    const fromDate = new Date(from_date);
+    const toDate = new Date(to_date);
+
+    if (fromDate > toDate) {
+        res.status(400).json(apiResponse(400, 'From date must be before or equal to To date'));
+        return;
+    }
+
+    const overlap = await LEAVE_REQUEST_MODEL.findOne({
+        organization_id: new Types.ObjectId(organization_id),
+        employee_uuid: new Types.ObjectId(employee_id),
+        status: { $in: ['SUBMITTED', 'APPROVED'] },
+        from_date: { $lte: toDate },
+        to_date: { $gte: fromDate }
+    }).select({ _id: 1 });
+
+    res.status(200).json(apiDataResponse(200, MESSAGES.SUCCESS, {
+        has_overlap: Boolean(overlap)
+    }));
+});
+
+// ========== APPLY LEAVE API HANDLER ==========
+const applyLeaveAPIHandler = async_error_handler(async (req: CustomRequest, res: Response) => {
+    const validation = safeValidate(applyLeaveSchema, { body: req.body });
+    if (!validation.success) {
+        res.status(400).json(apiDataResponse(400, 'Validation failed', validation.errors?.[0]?.message));
+        return;
+    }
+
+    const organization_id = req.user?.organization_id || req.body.organization_id;
+    if (!organization_id) {
+        res.status(400).json(apiResponse(400, 'Organization id is required'));
+        return;
+    }
+
+    const {
+        employee_id,
+        leave_type_id,
+        from_date,
+        to_date,
+        half_day,
+        half_day_type,
+        reason
+    } = validation.data?.body || {};
+
+    const fromDate = new Date(from_date);
+    const toDate = new Date(to_date);
+    if (fromDate > toDate) {
+        res.status(400).json(apiResponse(400, 'From date must be before or equal to To date'));
+        return;
+    }
+
+    if (half_day && fromDate.toDateString() !== toDate.toDateString()) {
+        res.status(400).json(apiResponse(400, 'Half day is only allowed for single-day leave'));
+        return;
+    }
 
     const employee = await EMPLOYEE_PROFILE_MODEL.findOne({
         _id: new Types.ObjectId(employee_id),
@@ -788,9 +1070,9 @@ const getLeaveBalanceAPIHandler = async_error_handler(async (req: CustomRequest,
     const policy = await LEAVE_POLICY_MODEL.findOne({
         organization_id: new Types.ObjectId(organization_id),
         status: 'ACTIVE',
-        effective_from: { $lte: asOfDate },
+        effective_from: { $lte: fromDate },
         $or: [
-            { effective_to: { $gte: asOfDate } },
+            { effective_to: { $gte: fromDate } },
             { effective_to: { $exists: false } },
             { effective_to: null }
         ]
@@ -801,86 +1083,359 @@ const getLeaveBalanceAPIHandler = async_error_handler(async (req: CustomRequest,
         return;
     }
 
-    const employeeType = employee?.job_details?.employmentType?.toUpperCase();
-    const employeeGender = employee?.personal_details?.gender?.toUpperCase();
-    const employeeMaritalStatus = employee?.personal_details?.maritalStatus?.toUpperCase();
-
-    const applicability:any = policy.applicability || {};
-    if (
-        (applicability.employee_type && applicability.employee_type !== 'ALL' && applicability.employee_type !== employeeType) ||
-        (applicability.gender && applicability.gender !== 'ALL' && applicability.gender !== employeeGender) ||
-        (applicability.marital_status && applicability.marital_status !== 'ALL' && applicability.marital_status !== employeeMaritalStatus)
-    ) {
-        res.status(200).json(apiDataResponse(200, MESSAGES.SUCCESS, {
-            summary: { total_balance: 0, total_credits: 0, total_used: 0 },
-            balances: []
-        }));
+    const rule = policy.leave_rules.find((r) => String(r.leave_type_id) === String(leave_type_id));
+    if (!rule) {
+        res.status(400).json(apiResponse(400, 'Leave type not allowed by policy'));
         return;
     }
 
-    const leaveTypeIds = policy.leave_rules.map((rule) => rule.leave_type_id);
-    const leaveTypes = await LEAVE_TYPE_MODEL.find({ _id: { $in: leaveTypeIds } }).lean();
-    const leaveTypeMap = new Map(leaveTypes.map((lt) => [String(lt._id), lt]));
+    if (half_day && !rule?.restrictions?.allow_half_day) {
+        res.status(400).json(apiResponse(400, 'Half day not allowed for this leave type'));
+        return;
+    }
 
-    const balances = [] as Array<any>;
-    let totalCredits = 0;
-    let totalUsed = 0;
+    const probationEnd = employee?.job_details?.probationEndDate;
+    if (probationEnd && policy?.applicability?.allow_during_probation === false && fromDate <= probationEnd) {
+        res.status(400).json(apiResponse(400, 'Leave not allowed during probation'));
+        return;
+    }
 
-    for (const rule of policy.leave_rules) {
-        const leaveType = leaveTypeMap.get(String(rule.leave_type_id));
-        const ledgerTotals = await LEAVE_LEDGER_MODEL.aggregate([
-            {
-                $match: {
-                    organization_id: new Types.ObjectId(organization_id),
-                    employee_uuid: new Types.ObjectId(employee._id),
-                    leave_type_id: new Types.ObjectId(rule.leave_type_id),
-                    effective_date: { $lte: asOfDate }
-                }
-            },
-            { $group: { _id: '$entry_type', total: { $sum: '$quantity' } } }
-        ]);
+    const overlap = await LEAVE_REQUEST_MODEL.findOne({
+        organization_id: new Types.ObjectId(organization_id),
+        employee_uuid: new Types.ObjectId(employee._id),
+        status: { $in: ['SUBMITTED', 'APPROVED'] },
+        from_date: { $lte: toDate },
+        to_date: { $gte: fromDate }
+    });
 
-        const totals = ledgerTotals.reduce((acc: Record<string, number>, row: { _id: string; total: number }) => {
-            acc[row._id] = row.total;
-            return acc;
-        }, {});
+    if (overlap) {
+        res.status(409).json(apiResponse(409, 'Leave already applied for the selected dates'));
+        return;
+    }
 
-        const ledgerCredits = (totals.CREDIT || 0) + (totals.ADJUSTMENT || 0);
-        const ledgerDebits = totals.DEBIT || 0;
-        const ledgerReversals = totals.REVERSAL || 0;
+    const totalDays = calculateRequestedDays(fromDate, toDate, Boolean(half_day));
 
-        const ruleCredits = calculateAccruedCredits(
-            rule.accrual as any,
-            employee?.job_details?.joiningDate || employee?.createdAt || new Date(),
-            asOfDate
-        );
+    const monthStart = new Date(fromDate.getFullYear(), fromDate.getMonth(), 1);
+    const monthEnd = new Date(fromDate.getFullYear(), fromDate.getMonth() + 1, 0, 23, 59, 59, 999);
+    const monthlyUsed = await LEAVE_REQUEST_MODEL.aggregate([
+        {
+            $match: {
+                organization_id: new Types.ObjectId(organization_id),
+                employee_uuid: new Types.ObjectId(employee._id),
+                leave_type_id: new Types.ObjectId(leave_type_id),
+                status: { $in: ['SUBMITTED', 'APPROVED'] },
+                from_date: { $lte: monthEnd },
+                to_date: { $gte: monthStart }
+            }
+        },
+        { $group: { _id: null, total: { $sum: '$total_days' } } }
+    ]);
 
-        const credit = ledgerCredits > 0 ? ledgerCredits : ruleCredits;
-        const used = Math.max(0, ledgerDebits - ledgerReversals);
-        const balance = credit - used;
+    const maxPerMonth = rule?.restrictions?.max_per_month;
+    const alreadyUsed = monthlyUsed[0]?.total || 0;
+    if (maxPerMonth != null && alreadyUsed + totalDays > maxPerMonth) {
+        res.status(400).json(apiResponse(400, 'Monthly leave limit exceeded'));
+        return;
+    }
 
-        totalCredits += credit;
-        totalUsed += used;
+    const ledgerTotals = await LEAVE_LEDGER_MODEL.aggregate([
+        {
+            $match: {
+                organization_id: new Types.ObjectId(organization_id),
+                employee_uuid: new Types.ObjectId(employee._id),
+                leave_type_id: new Types.ObjectId(leave_type_id),
+                effective_date: { $lte: fromDate }
+            }
+        },
+        { $group: { _id: '$entry_type', total: { $sum: '$quantity' } } }
+    ]);
 
-        balances.push({
-            leave_type_id: rule.leave_type_id,
-            leave_type_name: leaveType?.name || null,
-            leave_type_code: leaveType?.code || null,
-            credited: credit,
-            used,
-            balance
+    const pendingTotals = await LEAVE_REQUEST_MODEL.aggregate([
+        {
+            $match: {
+                organization_id: new Types.ObjectId(organization_id),
+                employee_uuid: new Types.ObjectId(employee._id),
+                leave_type_id: new Types.ObjectId(leave_type_id),
+                status: 'SUBMITTED'
+            }
+        },
+        { $group: { _id: null, total: { $sum: '$total_days' } } }
+    ]);
+
+    const totals = ledgerTotals.reduce((acc: Record<string, number>, row: { _id: string; total: number }) => {
+        acc[row._id] = row.total;
+        return acc;
+    }, {});
+
+    const ledgerCredits = (totals.CREDIT || 0) + (totals.ADJUSTMENT || 0);
+    const ledgerDebits = totals.DEBIT || 0;
+    const ledgerReversals = totals.REVERSAL || 0;
+
+    const ruleCredits = calculateAccruedCredits(
+        rule.accrual as any,
+        employee?.job_details?.joiningDate || employee?.createdAt || new Date(),
+        fromDate
+    );
+
+    const pendingRequested = pendingTotals[0]?.total || 0;
+    const available = (ledgerCredits > 0 ? ledgerCredits : ruleCredits)
+        - Math.max(0, ledgerDebits - ledgerReversals)
+        - pendingRequested;
+    if (!rule?.restrictions?.allow_negative_balance && totalDays > available) {
+        res.status(400).json(apiResponse(400, 'Insufficient leave balance'));
+        return;
+    }
+
+    const shouldAutoApprove = rule?.approval?.auto_approve === true;
+    const status = shouldAutoApprove ? 'APPROVED' : 'SUBMITTED';
+
+    const leaveRequest = await LEAVE_REQUEST_MODEL.create({
+        organization_id: new Types.ObjectId(organization_id),
+        employee_uuid: new Types.ObjectId(employee._id),
+        leave_type_id: new Types.ObjectId(leave_type_id),
+        policy_id: new Types.ObjectId(policy._id),
+        from_date: fromDate,
+        to_date: toDate,
+        total_days: totalDays,
+        half_day: Boolean(half_day),
+        half_day_type: half_day ? half_day_type || 'FIRST_HALF' : undefined,
+        reason: reason || undefined,
+        status,
+        applied_at: new Date(),
+        created_by: req.user?.user_id ? new Types.ObjectId(req.user.user_id) : undefined
+    });
+
+    if (shouldAutoApprove) {
+        const approvalDate = new Date();
+
+        await LEAVE_LEDGER_MODEL.create({
+            organization_id: new Types.ObjectId(organization_id),
+            employee_uuid: new Types.ObjectId(employee._id),
+            leave_type_id: new Types.ObjectId(leave_type_id),
+            entry_type: 'DEBIT',
+            quantity: totalDays,
+            effective_date: approvalDate,
+            reference_type: 'LEAVE_REQUEST',
+            reference_id: new Types.ObjectId(leaveRequest._id)
+        });
+
+        await LEAVE_REQUEST_MODEL.findByIdAndUpdate(leaveRequest._id, {
+            approved_by: req.user?.user_id ? new Types.ObjectId(req.user.user_id) : undefined,
+            approved_at: approvalDate
         });
     }
 
-    res.status(200).json(apiDataResponse(200, MESSAGES.SUCCESS, {
-        summary: {
-            total_balance: totalCredits - totalUsed,
-            total_credits: totalCredits,
-            total_used: totalUsed
-        },
-        balances
-    }));
+    res.status(200).json(apiDataResponse(200, MESSAGES.SUCCESS, leaveRequest));
 });
+
+// ========== UPDATE LEAVE REQUEST STATUS API HANDLER ==========
+const updateLeaveRequestStatusAPIHandler = async_error_handler(async (req: CustomRequest, res: Response) => {
+    const validation = safeValidate(updateLeaveRequestStatusSchema, { body: req.body });
+    if (!validation.success) {
+        res.status(400).json(apiDataResponse(400, 'Validation failed', validation.errors?.[0]?.message));
+        return;
+    }
+
+    const organization_id = req.user?.organization_id || req.body.organization_id;
+    if (!organization_id) {
+        res.status(400).json(apiResponse(400, 'Organization id is required'));
+        return;
+    }
+
+    const { leave_request_id, status, remarks } = validation.data?.body || { leave_request_id: '' };
+    const leaveRequest = await LEAVE_REQUEST_MODEL.findOne({
+        _id: new Types.ObjectId(leave_request_id),
+        organization_id: new Types.ObjectId(organization_id)
+    });
+
+    if (!leaveRequest) {
+        res.status(404).json(apiResponse(404, 'Leave request not found'));
+        return;
+    }
+
+    if (leaveRequest.status === 'APPROVED' || leaveRequest.status === 'REJECTED') {
+        res.status(400).json(apiResponse(400, 'Leave request already finalized'));
+        return;
+    }
+
+    leaveRequest.status = status;
+    leaveRequest.approval_remarks = remarks || undefined;
+    leaveRequest.approved_by = req.user?.user_id ? new Types.ObjectId(req.user.user_id) : undefined;
+    leaveRequest.approved_at = new Date();
+    await leaveRequest.save();
+
+    if (status === 'APPROVED') {
+        const exists = await LEAVE_LEDGER_MODEL.findOne({
+            reference_type: 'LEAVE_REQUEST',
+            reference_id: leaveRequest._id
+        });
+
+        if (!exists) {
+            const approvalDate = leaveRequest.approved_at || new Date();
+            await LEAVE_LEDGER_MODEL.create({
+                organization_id: new Types.ObjectId(organization_id),
+                employee_uuid: new Types.ObjectId(leaveRequest.employee_uuid),
+                leave_type_id: new Types.ObjectId(leaveRequest.leave_type_id),
+                entry_type: 'DEBIT',
+                quantity: leaveRequest.total_days,
+                effective_date: approvalDate,
+                reference_type: 'LEAVE_REQUEST',
+                reference_id: new Types.ObjectId(leaveRequest._id)
+            });
+        }
+    }
+
+    res.status(200).json(apiDataResponse(200, 'Leave request updated', leaveRequest));
+});
+
+//#region APPLY LEAVE API
+
+
+
+
+
+
+// ========== LIST PENDING APPROVEL  LEAVE  REQUESTS API HANDLER ==========
+const listLeaveRequestsAPIHandler = async_error_handler(
+    async (req: CustomRequest, res: Response) => {
+
+        const validation = safeValidate(listLeaveRequestsSchema, { body: req.body });
+        if (!validation.success) {
+            res.status(400).json(
+                apiDataResponse(400, 'Validation failed', validation.errors?.[0]?.message)
+            );
+            return;
+        }
+
+        const organization_id = req.user?.organization_id || req.body.organization_id;
+        if (!organization_id) {
+            res.status(400).json(apiResponse(400, 'Organization id is required'));
+            return;
+        }
+
+        const employee_id = req.user?.user_id;
+        if (!employee_id) {
+            res.status(400).json(apiResponse(400, 'User id is required'));
+            return;
+        }
+
+        const employeeObjectId = new Types.ObjectId(employee_id);
+
+        const { status, from_date, to_date } = validation.data?.body || {};
+
+        /**
+         * -------------------------------------------------
+         * STEP 1: Find Employees Managed By This Employee
+         * -------------------------------------------------
+         */
+        const managedEmployees = await EMPLOYEE_PROFILE_MODEL.find(
+            { 'job_details.reported_to': employeeObjectId },
+            { _id: 1 }
+        );
+
+        const managedEmployeeIds = managedEmployees.map(emp => emp._id);
+
+        // Include self + subordinates (if any)
+        const employeeFilterIds = [employeeObjectId, ...managedEmployeeIds];
+
+        /**
+         * -------------------------------------------------
+         * STEP 2: Build Base Query
+         * -------------------------------------------------
+         */
+        const query: Record<string, any> = {
+            organization_id: new Types.ObjectId(organization_id),
+            employee_uuid: { $in: employeeFilterIds },
+            status: status || 'SUBMITTED'
+        };
+
+        // Date filtering
+        if (from_date || to_date) {
+            query.from_date = {
+                $lte: to_date ? new Date(to_date) : new Date()
+            };
+
+            query.to_date = {
+                $gte: from_date ? new Date(from_date) : new Date('1970-01-01')
+            };
+        }
+
+        /**
+         * -------------------------------------------------
+         * STEP 3: Aggregation Pipeline
+         * -------------------------------------------------
+         */
+        const pipeline: any[] = [
+            {
+                $match: query
+            },
+            {
+                $lookup: {
+                    from: 'employee_details',
+                    localField: 'employee_uuid',
+                    foreignField: '_id',
+                    as: 'employee_details'
+                }
+            },
+            { $unwind: '$employee_details' },
+            {
+                $lookup: {
+                    from: 'leave_type',
+                    localField: 'leave_type_id',
+                    foreignField: '_id',
+                    as: 'leave_type_details'
+                }
+            },
+            {
+                $unwind: {
+                    path: '$leave_type_details',
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $project: {
+                    _id: 1,
+                    from_date: 1,
+                    to_date: 1,
+                    total_days: 1,
+                    half_day: 1,
+                    half_day_type: 1,
+                    status: 1,
+                    applied_at: 1,
+                    employee_details: {
+                        _id: '$employee_details._id',
+                        employee_id: '$employee_details.job_details.employee_id',
+                        first_name: '$employee_details.personal_details.firstName',
+                        last_name: '$employee_details.personal_details.lastName'
+                    },
+                    leave_type_id: '$leave_type_details._id',
+                    leave_type_name: '$leave_type_details.name',
+                    leave_type_code: '$leave_type_details.code'
+                }
+            },
+            {
+                $sort: { createdAt: -1 }
+            }
+        ];
+
+        /**
+         * -------------------------------------------------
+         * STEP 4: Execute Aggregation
+         * -------------------------------------------------
+         */
+        const data = await LEAVE_REQUEST_MODEL.aggregate(pipeline);
+
+        res.status(200).json(
+            apiDataResponse(200, MESSAGES.SUCCESS, { data })
+        );
+    }
+);
+
+//#endregion
+
+
+
+
 
 export {
     createLeaveTypeAPIHandler,
@@ -894,6 +1449,10 @@ export {
     listHolidaysAPIHandler,
     deleteHolidayAPIHandler,
     createWeeklyOffAPIHandler,
-    getLeaveBalanceAPIHandler
+    getLeaveBalanceAPIHandler,
+    applyLeaveAPIHandler,
+    checkLeaveOverlapAPIHandler,
+    updateLeaveRequestStatusAPIHandler,
+    listLeaveRequestsAPIHandler
 };
 

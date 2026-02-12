@@ -25,9 +25,16 @@ export const leaveTypesDropdownSchema = z.object({
     is_active: z.boolean().optional()
 });
 
+// Roles Dropdown Schema (No pagination)
+export const rolesDropdownSchema = z.object({
+    search_key: z.string().optional(),
+    is_active: z.boolean().optional()
+});
+
 /**
  * TypeScript Types Exported from Zod Schemas
  */
 export type OrganizationsDropdownInput = z.infer<typeof organizationsDropdownSchema>;
 export type LookupsDropdownInput = z.infer<typeof lookupsDropdownSchema>;
 export type LeaveTypesDropdownInput = z.infer<typeof leaveTypesDropdownSchema>;
+export type RolesDropdownInput = z.infer<typeof rolesDropdownSchema>;

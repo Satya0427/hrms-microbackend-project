@@ -267,14 +267,112 @@ export const createWeeklyOffSchema = z.object({
 
 export const getLeaveBalanceSchema = z.object({
     body: z.object({
+        employee_id: z.preprocess(
+            (val) => (val === '' ? undefined : val),
+            z.string()
+                .min(1, 'Employee id is required')
+                .regex(/^[a-f0-9]{24}$/, 'Invalid employee id format')
+        )
+            .optional()
+            .nullable(),
+
+        as_of_date: z.preprocess(
+            (val) => (val === '' ? undefined : val),
+            z.string()
+                .refine((val) => val == null || !isNaN(Date.parse(val)), 'as_of_date must be a valid date')
+        )
+            .optional()
+            .nullable()
+    })
+});
+
+export const applyLeaveSchema = z.object({
+    body: z.object({
         employee_id: z.string()
             .min(1, 'Employee id is required')
             .regex(/^[a-f0-9]{24}$/, 'Invalid employee id format'),
 
-        as_of_date: z.string()
+        leave_type_id: z.string()
+            .min(1, 'Leave type id is required')
+            .regex(/^[a-f0-9]{24}$/, 'Invalid leave type id format'),
+
+        from_date: z.string()
+            .min(1, 'From date is required')
+            .refine((val) => !isNaN(Date.parse(val)), 'From date must be a valid date'),
+
+        to_date: z.string()
+            .min(1, 'To date is required')
+            .refine((val) => !isNaN(Date.parse(val)), 'To date must be a valid date'),
+
+        half_day: z.boolean().optional().default(false),
+        half_day_type: z.enum(['FIRST_HALF', 'SECOND_HALF']).optional().nullable(),
+
+        reason: z.string().optional().nullable()
+    })
+});
+
+export const checkLeaveOverlapSchema = z.object({
+    body: z.object({
+        employee_id: z.string()
+            .min(1, 'Employee id is required')
+            .regex(/^[a-f0-9]{24}$/, 'Invalid employee id format'),
+
+        leave_type_id: z.string()
+            .regex(/^[a-f0-9]{24}$/, 'Invalid leave type id format')
             .optional()
-            .nullable()
-            .refine((val) => val == null || !isNaN(Date.parse(val)), 'as_of_date must be a valid date')
+            .nullable(),
+
+        from_date: z.string()
+            .min(1, 'From date is required')
+            .refine((val) => !isNaN(Date.parse(val)), 'From date must be a valid date'),
+
+        to_date: z.string()
+            .min(1, 'To date is required')
+            .refine((val) => !isNaN(Date.parse(val)), 'To date must be a valid date')
+    })
+});
+
+export const updateLeaveRequestStatusSchema = z.object({
+    body: z.object({
+        leave_request_id: z.string()
+            .min(1, 'Leave request id is required')
+            .regex(/^[a-f0-9]{24}$/, 'Invalid leave request id format'),
+
+        status: z.enum(['APPROVED', 'REJECTED']),
+        remarks: z.string().optional().nullable()
+    })
+});
+
+export const approveLeaveRequestSchema = z.object({
+    body: z.object({
+        leave_request_id: z.string()
+            .min(1, 'Leave request id is required')
+            .regex(/^[a-f0-9]{24}$/, 'Invalid leave request id format'),
+
+        remarks: z.string().optional().nullable()
+    })
+});
+
+export const listLeaveRequestsSchema = z.object({
+    body: z.object({
+        manager_id: z.string()
+            .regex(/^[a-f0-9]{24}$/, 'Invalid manager id format')
+            .optional()
+            .nullable(),
+            
+        employee_id: z.string()
+            .regex(/^[a-f0-9]{24}$/, 'Invalid employee id format')
+            .optional()
+            .nullable(),
+
+        status: z.enum(['DRAFT', 'SUBMITTED', 'APPROVED', 'REJECTED', 'CANCELLED'])
+            .optional(),
+
+        from_date: z.string().optional().nullable(),
+        to_date: z.string().optional().nullable(),
+
+        page: z.number().optional().default(1),
+        limit: z.number().optional().default(10)
     })
 });
 
@@ -290,3 +388,7 @@ export type ListHolidayInput = z.infer<typeof listHolidaySchema>['body'];
 export type DeleteHolidayInput = z.infer<typeof deleteHolidaySchema>['body'];
 export type CreateWeeklyOffInput = z.infer<typeof createWeeklyOffSchema>['body'];
 export type GetLeaveBalanceInput = z.infer<typeof getLeaveBalanceSchema>['body'];
+export type ApplyLeaveInput = z.infer<typeof applyLeaveSchema>['body'];
+export type CheckLeaveOverlapInput = z.infer<typeof checkLeaveOverlapSchema>['body'];
+export type UpdateLeaveRequestStatusInput = z.infer<typeof updateLeaveRequestStatusSchema>['body'];
+export type ListLeaveRequestsInput = z.infer<typeof listLeaveRequestsSchema>['body'];

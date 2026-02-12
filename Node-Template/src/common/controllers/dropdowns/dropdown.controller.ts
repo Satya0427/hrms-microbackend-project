@@ -4,13 +4,15 @@ import { apiDataResponse, apiResponse } from '../../utils/api_response';
 import { MESSAGES } from '../../utils/messages';
 import { ORGANIZATION_MODEL } from '../../schemas/Organizations/organization.schema';
 import { safeValidate } from '../../utils/validation_middleware';
-import { leaveTypesDropdownSchema, organizationsDropdownSchema } from './dropdown.validator';
+import { leaveTypesDropdownSchema, organizationsDropdownSchema, rolesDropdownSchema } from './dropdown.validator';
 import { DEPARTMENT_MODEL } from '../../../common/schemas/departments_designations/departments.schema';
 import { DESIGNATION_MODEL } from '../../../common/schemas/departments_designations/designation.schema';
 import { EMPLOYEE_USER_MODEL } from '../../../common/schemas/Employees/user.schema';
 import { LEAVE_TYPE_MODEL } from '../../../common/schemas/leave-attendance/leave-configs/leave-type.schema';
+import { ROLES_MODEL } from '../../../common/schemas/rcab/roles.schema';
 import { Types } from 'mongoose';
 import { getGridFSBucket } from '../../../config/db_connections/gridfs';
+import { EMPLOYEE_PROFILE_MODEL } from '../../../common/schemas/Employees/employee_onboarding.schema';
 
 interface CustomRequest extends Request {
     user?: {
@@ -100,33 +102,31 @@ const getDesignationsByDepartmentAPIHandler = async_error_handler(async (req: Cu
 );
 
 const getEmployeeByOrganizationAPIHandler = async_error_handler(async (req: CustomRequest, res: Response) => {
-
     const organization_id = req.user?.organization_id;
-
     if (!organization_id) {
         res.status(400).json(apiResponse(400, "Organization Id is required"));
         return
     }
-
-    const employees = await EMPLOYEE_USER_MODEL.aggregate([
+    const employees = await EMPLOYEE_PROFILE_MODEL.aggregate([
         {
             $match: {
-                organization_id: organization_id,
+                organization_id: new Types.ObjectId(organization_id),
                 is_deleted: false
             }
         },
         {
             $project: {
                 _id: 1,
-                first_name: 1,
-                last_name: 1,
+                employee_id: '$job_details.employee_id',
+                firstName: '$personal_details.firstName',
+                lastName: '$personal_details.lastName',
                 emp_name: {
                     $trim: {
                         input: {
                             $concat: [
-                                { $ifNull: ["$first_name", ""] },
-                                " ",
-                                { $ifNull: ["$last_name", ""] }
+                                { $ifNull: ['$personal_details.firstName', ''] },
+                                ' ',
+                                { $ifNull: ['$personal_details.lastName', ''] }
                             ]
                         }
                     }
@@ -140,12 +140,12 @@ const getEmployeeByOrganizationAPIHandler = async_error_handler(async (req: Cust
 
     const dropdownData = employees.map(emp => ({
         id: emp._id,
-        emp_name: emp.emp_name
+        employee_id: emp.employee_id,
+        name: emp.emp_name
     }));
 
     res.status(200).json(apiDataResponse(200, MESSAGES.SUCCESS, dropdownData));
-}
-);
+});
 
 // GET LEAVE TYPES FOR DROPDOWN (Without Pagination)
 const getLeaveTypesDropdownAPIHandler = async_error_handler(async (req: CustomRequest, res: Response) => {
@@ -161,7 +161,7 @@ const getLeaveTypesDropdownAPIHandler = async_error_handler(async (req: CustomRe
         return;
     }
 
-    const { search_key, is_active } = {search_key:"", is_active: true};
+    const { search_key, is_active } = { search_key: "", is_active: true };
     const query: Record<string, any> = {
         organization_id: new Types.ObjectId(organization_id)
     };
@@ -186,6 +186,51 @@ const getLeaveTypesDropdownAPIHandler = async_error_handler(async (req: CustomRe
         id: item._id,
         name: item.name,
         code: item.code
+    }));
+
+    res.status(200).json(apiDataResponse(200, MESSAGES.SUCCESS, dropdownData));
+});
+
+// GET ROLES FOR DROPDOWN (Without Pagination)
+const getRolesDropdownAPIHandler = async_error_handler(async (req: CustomRequest, res: Response) => {
+    // const validation = safeValidate(rolesDropdownSchema, req.body);
+    // if (!validation.success) {
+    //     res.status(400).json(apiDataResponse(400, 'Validation failed', validation.errors?.[0]?.message));
+    //     return;
+    // }
+
+    const organization_id = req.user?.organization_id;
+    if (!organization_id) {
+        res.status(400).json(apiResponse(400, 'Organization Id is required'));
+        return;
+    }
+
+    const { search_key, is_active } = { search_key: "", is_active: true };
+    const query: Record<string, any> = {
+        // organization_id: new Types.ObjectId(organization_id),
+        is_deleted: false
+    };
+
+    if (search_key) {
+        query.$or = [
+            { role_name: { $regex: search_key, $options: 'i' } },
+            { role_code: { $regex: search_key, $options: 'i' } }
+        ];
+    }
+
+    if (typeof is_active === 'boolean') {
+        query.is_active = is_active;
+    }
+
+    const roles = await ROLES_MODEL.find(query)
+        .select('_id role_name role_code')
+        .sort({ role_name: 1 })
+        .lean();
+
+    const dropdownData = roles.map(role => ({
+        id: role._id,
+        name: role.role_name,
+        code: role.role_code
     }));
 
     res.status(200).json(apiDataResponse(200, MESSAGES.SUCCESS, dropdownData));
@@ -225,6 +270,8 @@ const getDocumentsAPIHandler = async_error_handler(async (req: Request, res: Res
     downloadStream.pipe(res);
 });
 
+// ===== ROLES API HANDLER =====
+
 
 export {
     getOrganizationsDropdownAPIHandler,
@@ -232,5 +279,6 @@ export {
     getDepartmentsByOrganizationAPIHandler,
     getEmployeeByOrganizationAPIHandler,
     getEmployeeProfileImage,
-    getLeaveTypesDropdownAPIHandler
+    getLeaveTypesDropdownAPIHandler,
+    getRolesDropdownAPIHandler
 };
