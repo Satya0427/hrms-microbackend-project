@@ -34,6 +34,7 @@ export interface IEmployeeJobDetails {
     probationNotes?: string;
     employee_id: Types.ObjectId;
     employmentType?: string;
+    shift_id?: Types.ObjectId;
 }
 
 export interface IEmployeeEmergencyEmbedded {
@@ -220,6 +221,11 @@ const EMPLOYEE_JOB_SCHEMA = new Schema(
             type: String,
             trim: true,
             maxlength: [50, "Employment type cannot exceed 50 characters"]
+        },
+
+        shift_id: {
+            type: Types.ObjectId,
+            ref: "attendance_shifts"
         }
     },
     { _id: false }

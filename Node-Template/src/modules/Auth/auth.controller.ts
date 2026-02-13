@@ -66,7 +66,7 @@ const loginAPIHandler = async_error_handler(async (req: CustomRequest, res: Resp
     email = email.trim();
     password = password.trim();
 
-    const userDetails:any = await EMPLOYEE_PROFILE_MODEL.findOne({ "personal_details.email": email });
+    const userDetails: any = await EMPLOYEE_PROFILE_MODEL.findOne({ "personal_details.email": email });
     if (!userDetails) {
         res.status(400).json(apiResponse(400, 'Please check UserID and Password'));
         return;
@@ -78,7 +78,7 @@ const loginAPIHandler = async_error_handler(async (req: CustomRequest, res: Resp
         return;
     }
 
-    const payload:any = {
+    const payload: any = {
         user_id: userDetails._id.toString(),
         email: userDetails.personal_details.email,
         phone_number: userDetails.personal_details.phone,
@@ -92,12 +92,14 @@ const loginAPIHandler = async_error_handler(async (req: CustomRequest, res: Resp
         phone_number: userDetails.personal_details.phone,
         user_type: userDetails.user_type,
         scope: userDetails.scope,
-        organization_id: userDetails?.organization_id
+        organization_id: userDetails?.organization_id,
+        name: `${userDetails?.personal_details?.firstName || ''} ${userDetails?.personal_details?.lastName || ''}`.trim(),
+        profile_image: userDetails?.personal_details?.profileImage || '',
     }
-
+    
     const { accessToken, refreshToken } = await storeTokens(payload);
     res.cookie(cookieName, refreshToken, cookieOptions);
-    res.status(200).json({ sts: 200, msg: MESSAGES.SUCCESS, data: { user_details, token: { accessToken, user_details } } });
+    res.status(200).json({ sts: 200, msg: MESSAGES.SUCCESS, data: { user_details, token: { accessToken } } });
 });
 
 // Refresh Token API Call

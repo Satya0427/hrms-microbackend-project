@@ -23,7 +23,7 @@ export const employeePersonalSchema = z.object({
   address: z.string().max(250).optional(),
   maritalStatus: z.string().max(30).optional(),
   nationality: z.string().max(50).optional(),
-  password: z.string().min(6).max(100).optional()
+  password: z.string().min(6).max(100).optional().nullable()
 });
 
 /* ================= JOB DETAILS ================= */
@@ -42,7 +42,8 @@ export const employeeJobSchema = z.object({
   probationStatus: z.string().max(30).optional(),
   probationNotes: z.string().max(500).optional(),
   employee_id: z.string().min(3).max(30),
-  employmentType: z.string().max(50).optional()
+  employmentType: z.string().max(50).optional(),
+  shift_id: z.string().optional().nullable()
 });
 
 /* ================= EMERGENCY CONTACT ================= */

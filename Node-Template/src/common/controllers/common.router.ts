@@ -12,6 +12,7 @@ import {
     getOrganizationsDropdownAPIHandler,
     getLeaveTypesDropdownAPIHandler,
     getRolesDropdownAPIHandler,
+    getShiftsDropdownAPIHandler,
 } from './dropdowns/dropdown.controller';
 
 const COMMON_ROUTER: Router = express.Router();
@@ -60,6 +61,13 @@ COMMON_ROUTER.get(
     '/roles-dropdown',
     accessTokenValidatorMiddleware,
     getRolesDropdownAPIHandler
+);
+
+// Shifts Dropdown (Without pagination)
+COMMON_ROUTER.get(
+    '/shifts-dropdown',
+    accessTokenValidatorMiddleware,
+    getShiftsDropdownAPIHandler
 );
 
 // Organizations Dropdown (Without pagination)

@@ -13,6 +13,7 @@ import { ROLES_MODEL } from '../../../common/schemas/rcab/roles.schema';
 import { Types } from 'mongoose';
 import { getGridFSBucket } from '../../../config/db_connections/gridfs';
 import { EMPLOYEE_PROFILE_MODEL } from '../../../common/schemas/Employees/employee_onboarding.schema';
+import { ATTENDANCE_SHIFT_MODEL } from '../../schemas/leave-attendance/attendance/attendance_shifts.schema';
 
 interface CustomRequest extends Request {
     user?: {
@@ -50,6 +51,7 @@ const getOrganizationsDropdownAPIHandler = async_error_handler(async (req: Custo
     res.status(200).json(apiDataResponse(200, MESSAGES.SUCCESS, dropdownData));
 });
 
+// ======= GET DEPARTMENTS BY ORGANIZATION API HANDLER =======
 const getDepartmentsByOrganizationAPIHandler = async_error_handler(
     async (req: CustomRequest, res: Response) => {
 
@@ -74,7 +76,7 @@ const getDepartmentsByOrganizationAPIHandler = async_error_handler(
     }
 );
 
-
+// ======= GET DESIGNATIONS BY DEPARTMENT API HANDLER =======
 const getDesignationsByDepartmentAPIHandler = async_error_handler(async (req: CustomRequest, res: Response) => {
 
     const { departmentId } = req.body;
@@ -101,6 +103,7 @@ const getDesignationsByDepartmentAPIHandler = async_error_handler(async (req: Cu
 }
 );
 
+// ====== GET EMPLOYEES BY ORGANIZATION API HANDLER =======
 const getEmployeeByOrganizationAPIHandler = async_error_handler(async (req: CustomRequest, res: Response) => {
     const organization_id = req.user?.organization_id;
     if (!organization_id) {
@@ -147,7 +150,7 @@ const getEmployeeByOrganizationAPIHandler = async_error_handler(async (req: Cust
     res.status(200).json(apiDataResponse(200, MESSAGES.SUCCESS, dropdownData));
 });
 
-// GET LEAVE TYPES FOR DROPDOWN (Without Pagination)
+// ====== GET LEAVE TYPES FOR DROPDOWN (Without Pagination) ======
 const getLeaveTypesDropdownAPIHandler = async_error_handler(async (req: CustomRequest, res: Response) => {
     // const validation = safeValidate(leaveTypesDropdownSchema, req.body);
     // if (!validation.success) {
@@ -191,7 +194,7 @@ const getLeaveTypesDropdownAPIHandler = async_error_handler(async (req: CustomRe
     res.status(200).json(apiDataResponse(200, MESSAGES.SUCCESS, dropdownData));
 });
 
-// GET ROLES FOR DROPDOWN (Without Pagination)
+// ====== GET ROLES FOR DROPDOWN (Without Pagination) ======
 const getRolesDropdownAPIHandler = async_error_handler(async (req: CustomRequest, res: Response) => {
     // const validation = safeValidate(rolesDropdownSchema, req.body);
     // if (!validation.success) {
@@ -236,6 +239,36 @@ const getRolesDropdownAPIHandler = async_error_handler(async (req: CustomRequest
     res.status(200).json(apiDataResponse(200, MESSAGES.SUCCESS, dropdownData));
 });
 
+
+// ======= GET SHIFTS BY ORGANIZATION API HANDLER =======
+const getShiftsDropdownAPIHandler = async_error_handler(async (req: CustomRequest, res: Response) => {
+    const organization_id = req.user?.organization_id;
+    if (!organization_id) {
+        res.status(400).json(apiResponse(400, 'Organization Id is required'));
+        return;
+    }
+    const shifts = await ATTENDANCE_SHIFT_MODEL.find({
+        organization_id: new Types.ObjectId(organization_id),
+        is_active: true
+    })
+        .select('_id shift_name start_time end_time grace_minutes working_hours')
+        .sort({ shift_name: 1 })
+        .lean();
+    const dropdownData = shifts.map(s => ({
+        id: s._id,
+        name: s.shift_name,
+        start_time: s.start_time,
+        end_time: s.end_time,
+        grace_minutes: s.grace_minutes ?? 0,
+        working_hours: s.working_hours ?? null
+    }));
+
+    res.status(200).json(apiDataResponse(200, MESSAGES.SUCCESS, dropdownData));
+});
+
+
+
+// ===== GET EMPLOYEE PROFILE IMAGE API HANDLER ======
 const getEmployeeProfileImage = async_error_handler(async (req: Request, res: Response) => {
     const { id } = req.params;
     if (!Types.ObjectId.isValid(id)) {
@@ -253,6 +286,7 @@ const getEmployeeProfileImage = async_error_handler(async (req: Request, res: Re
     downloadStream.pipe(res);
 });
 
+// ===== GET DOCUMENTS API HANDLER ======
 const getDocumentsAPIHandler = async_error_handler(async (req: Request, res: Response) => {
     const { id } = req.params;
     if (!Types.ObjectId.isValid(id)) {
@@ -280,5 +314,6 @@ export {
     getEmployeeByOrganizationAPIHandler,
     getEmployeeProfileImage,
     getLeaveTypesDropdownAPIHandler,
-    getRolesDropdownAPIHandler
+    getRolesDropdownAPIHandler,
+    getShiftsDropdownAPIHandler
 };
