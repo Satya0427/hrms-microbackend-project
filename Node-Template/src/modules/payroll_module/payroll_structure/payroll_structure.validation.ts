@@ -288,4 +288,11 @@ export const validateTemplateSchema = z.object({
     })
 });
 
+// 8️⃣ GET TEMPLATES FOR ASSIGNMENT
+export const getTemplatesForAssignmentSchema = z.object({
+    body: z.object({
+        search: z.string().optional().nullable(),
+    })
+});
+
 // #endregion

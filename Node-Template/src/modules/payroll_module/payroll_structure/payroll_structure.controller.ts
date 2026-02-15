@@ -602,6 +602,7 @@ const createTemplateAPIHandler = async_error_handler(async (req: CustomRequest, 
             value_type: e.value_type,
             fixed_amount: e.fixed_amount,
             percentage: e.percentage,
+            formula: e.formula,
             override_allowed: e.override_allowed || false,
             calculation_order: e.calculation_order,
             is_mandatory: e.is_mandatory !== undefined ? e.is_mandatory : true
@@ -916,6 +917,7 @@ const updateTemplateAPIHandler = async_error_handler(async (req: CustomRequest, 
             value_type: e.value_type,
             fixed_amount: e.fixed_amount,
             percentage: e.percentage,
+            formula: e.formula,
             override_allowed: e.override_allowed || false,
             calculation_order: e.calculation_order,
             is_mandatory: e.is_mandatory !== undefined ? e.is_mandatory : true
@@ -1079,6 +1081,114 @@ const deleteTemplateAPIHandler = async_error_handler(async (req: CustomRequest, 
 
     res.status(200).json(apiResponse(200, 'Template deleted successfully'));
 });
+
+// 8️⃣ GET TEMPLATES FOR ASSIGNMENT DROPDOWN
+const getTemplatesForAssignmentAPIHandler = async_error_handler(async (req: CustomRequest, res: Response) => {
+    const organization_id = req.user?.organization_id;
+
+    if (!organization_id) {
+        res.status(400).json(apiResponse(400, 'Organization Id is required'));
+        return;
+    }
+
+    const { search } = req.body;
+
+    const query: any = {
+        organization_id: new Types.ObjectId(organization_id),
+        status: 'ACTIVE',
+        is_deleted: false
+    };
+
+    // Search by name or code
+    if (search) {
+        query.$or = [
+            { template_name: { $regex: search, $options: 'i' } },
+            { template_code: { $regex: search, $options: 'i' } }
+        ];
+    }
+
+    // Fetch templates with populated earnings and deductions
+    const templates = await PAYROLL_SALARY_TEMPLATE_MODEL.find(query)
+        .select('_id template_name template_code status earnings deductions employees_count')
+        .lean();
+
+    // Get all component IDs from all templates
+    const allComponentIds = new Set<string>();
+    templates.forEach(template => {
+        template.earnings.forEach((e: any) => allComponentIds.add(e.component_id.toString()));
+        template.deductions.forEach((d: any) => allComponentIds.add(d.component_id.toString()));
+    });
+
+    // Fetch all components in one query
+    const components = await PAYROLL_SALARY_COMPONENT_MODEL.find({
+        _id: { $in: Array.from(allComponentIds).map(id => new Types.ObjectId(id)) },
+        organization_id: new Types.ObjectId(organization_id),
+        is_deleted: false
+    }).lean();
+
+    // Create component lookup map
+    const componentMap = new Map();
+    components.forEach(comp => {
+        componentMap.set(comp._id.toString(), comp);
+    });
+
+    // Enrich templates with full component details
+    const enrichedTemplates = templates.map(template => {
+        const enrichedEarnings = template.earnings.map((e: any) => {
+            const component = componentMap.get(e.component_id.toString());
+            return {
+                _id: e.component_id,
+                component_id: e.component_id,
+                component_name: component?.component_name || '',
+                component_code: component?.component_code || '',
+                component_type: component?.component_type || 'EARNINGS',
+                value_type: e.value_type,
+                fixed_amount: e.fixed_amount,
+                percentage: e.percentage,
+                formula: e.formula,
+                override_allowed: e.override_allowed,
+                calculation_order: e.calculation_order,
+                is_mandatory: e.is_mandatory,
+                is_basic: component?.is_basic || false,
+                calculation_type: component?.calculation_type || 'fixed'
+            };
+        });
+
+        const enrichedDeductions = template.deductions.map((d: any) => {
+            const component = componentMap.get(d.component_id.toString());
+            return {
+                _id: d.component_id,
+                component_id: d.component_id,
+                component_name: component?.component_name || '',
+                component_code: component?.component_code || '',
+                component_type: component?.component_type || 'DEDUCTIONS',
+                deduction_nature: component?.deduction_nature,
+                calculation_type: component?.calculation_type || 'fixed',
+                percentage: component?.percentage,
+                fixed_amount: component?.fixed_amount,
+                formula: component?.formula,
+                employer_contribution: component?.employer_contribution,
+                employee_contribution: component?.employee_contribution,
+                max_cap: component?.max_cap,
+                override_allowed: d.override_allowed
+            };
+        });
+
+        return {
+            _id: template._id,
+            template_name: template.template_name,
+            template_code: template.template_code,
+            status: template.status,
+            employees_count: template.employees_count,
+            earnings: enrichedEarnings,
+            deductions: enrichedDeductions,
+            total_earnings_count: enrichedEarnings.length,
+            total_deductions_count: enrichedDeductions.length
+        };
+    });
+
+    res.status(200).json(apiDataResponse(200, MESSAGES.SUCCESS, enrichedTemplates));
+});
 // #endregion
 
 export {
@@ -1094,5 +1204,6 @@ export {
     updateTemplateAPIHandler,
     duplicateTemplateAPIHandler,
     toggleTemplateStatusAPIHandler,
-    deleteTemplateAPIHandler
+    deleteTemplateAPIHandler,
+    getTemplatesForAssignmentAPIHandler
 };

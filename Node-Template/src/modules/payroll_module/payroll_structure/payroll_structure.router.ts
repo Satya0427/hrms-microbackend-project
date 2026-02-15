@@ -14,7 +14,8 @@ import {
     updateTemplateSchema,
     duplicateTemplateSchema,
     toggleTemplateStatusSchema,
-    deleteTemplateSchema
+    deleteTemplateSchema,
+    getTemplatesForAssignmentSchema
 } from './payroll_structure.validation';
 import {
     createComponentAPIHandler,
@@ -29,7 +30,8 @@ import {
     updateTemplateAPIHandler,
     duplicateTemplateAPIHandler,
     toggleTemplateStatusAPIHandler,
-    deleteTemplateAPIHandler
+    deleteTemplateAPIHandler,
+    getTemplatesForAssignmentAPIHandler
 } from './payroll_structure.controller';
 
 const PAYROLL_STRUCTURE_ROUTER: Router = express.Router();
@@ -144,6 +146,14 @@ PAYROLL_STRUCTURE_ROUTER.post(
     accessTokenValidatorMiddleware,
     validateRequest(deleteTemplateSchema, 'body'),
     deleteTemplateAPIHandler
+);
+
+// 8️⃣ Get Templates for Assignment Dropdown
+PAYROLL_STRUCTURE_ROUTER.post(
+    '/template/for_assignment',
+    accessTokenValidatorMiddleware,
+    validateRequest(getTemplatesForAssignmentSchema, 'body'),
+    getTemplatesForAssignmentAPIHandler
 );
 
 
