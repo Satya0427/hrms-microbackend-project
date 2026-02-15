@@ -4,6 +4,7 @@ import { bulkLookupsDropdownSchema, leaveTypesDropdownSchema, lookupsDropdownSch
 import { validateRequest } from '../utils/validation_middleware';
 import { getLookupsByCategory } from '../utils/common';
 import { getBulkLookups } from './lookups/lookup.controller';
+import { getEmployeesByManagerBodySchema } from './utilities/utilities.validatior';
 import {
     getDepartmentsByOrganizationAPIHandler,
     getDesignationsByDepartmentAPIHandler,
@@ -14,6 +15,7 @@ import {
     getRolesDropdownAPIHandler,
     getShiftsDropdownAPIHandler,
 } from './dropdowns/dropdown.controller';
+import { getEmployeesByManagerIdAPIHandler } from './utilities/utilities.controller';
 
 const COMMON_ROUTER: Router = express.Router();
 // Organizations Dropdown (Without pagination)
@@ -47,6 +49,13 @@ COMMON_ROUTER.get(
     '/employee-dropdown',
     accessTokenValidatorMiddleware,
     getEmployeeByOrganizationAPIHandler
+);
+
+COMMON_ROUTER.post(
+    '/employees-by-manager',
+    accessTokenValidatorMiddleware,
+    validateRequest(getEmployeesByManagerBodySchema, 'body'),
+    getEmployeesByManagerIdAPIHandler
 );
 
 // Leave Types Dropdown (Without pagination)

@@ -21,6 +21,7 @@ export interface ILeaveRequest extends Document {
     approval_remarks?: string;
     created_by?: Types.ObjectId;
     updated_by?: Types.ObjectId;
+    manager_id?: Types.ObjectId;
 }
 
 const LEAVE_REQUEST_SCHEMA = new mongoose.Schema(
@@ -54,7 +55,8 @@ const LEAVE_REQUEST_SCHEMA = new mongoose.Schema(
         approval_remarks: { type: String },
 
         created_by: { type: mongoose.Schema.Types.ObjectId },
-        updated_by: { type: mongoose.Schema.Types.ObjectId }
+        updated_by: { type: mongoose.Schema.Types.ObjectId },
+        manager_id: { type: mongoose.Schema.Types.ObjectId }
     },
     { timestamps: true }
 );

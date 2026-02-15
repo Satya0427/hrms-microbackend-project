@@ -145,10 +145,27 @@ const createEmployeeOnboardingAPIHandler = async_error_handler(async (req: Custo
     profileImageId = uploadStream.id;
   }
 
-  // PASSWORD (ONLY IF PRESENT)
   if (personal_details.password) {
     personal_details.password = await encryptPassword(personal_details.password);
   }
+
+  // PASSWORD (ONLY IF PRESENT)
+  if (employee_uuid && !personal_details.password) {
+    const existingEmployee = await EMPLOYEE_PROFILE_MODEL.findOne({
+      _id: new Types.ObjectId(employee_uuid),
+      organization_id,
+      is_deleted: false
+    }).select("personal_details.password").lean();
+    if (existingEmployee) {
+      personal_details.password = existingEmployee.personal_details.password;
+    }
+  } else {
+    if (!personal_details.password) {
+      res.status(400).json(apiResponse(400, "Password is required for new employee"));
+      return;
+    }
+  }
+
   /* ================= 5. CREATE / UPDATE EMPLOYEE ================= */
   const employeePayload = {
     organization_id,

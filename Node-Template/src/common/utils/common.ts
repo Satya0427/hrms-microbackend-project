@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import logger from '../../config/logger';
 import { MESSAGES } from './messages';
 import { LOOKUP_MODEL } from '../schemas/lookups/lookup.schema';
+import { EMPLOYEE_PROFILE_MODEL } from '../schemas/Employees/employee_onboarding.schema';
 
 /* Encrypt/Hash Password */
 async function encryptPassword(password: string): Promise<string> {
@@ -50,5 +51,18 @@ const getLookupsByCategory = async (req: any, res: any) => {
     });
 };
 
+const getManagerAndRoleByEmployeeUuid = async (empId: string, organization_id?: string) => {
+    const employee = await EMPLOYEE_PROFILE_MODEL.findOne({
+        _id: empId,
+        is_active: true,
+        is_deleted: false,
+        organization_id
+    }).select('job_details.reported_to job_details.role_id').lean();
 
-export { encryptPassword, verifyPassword, getLookupsByCategory};
+    const manager_id = (employee as any)?.job_details?.reported_to || null;
+    const role_id = (employee as any)?.job_details?.role_id || null;
+
+    return { manager_id, role_id };
+};
+
+export { encryptPassword, verifyPassword, getLookupsByCategory, getManagerAndRoleByEmployeeUuid };

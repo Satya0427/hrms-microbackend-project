@@ -290,7 +290,9 @@ export const applyLeaveSchema = z.object({
     body: z.object({
         employee_id: z.string()
             .min(1, 'Employee id is required')
-            .regex(/^[a-f0-9]{24}$/, 'Invalid employee id format'),
+            .regex(/^[a-f0-9]{24}$/, 'Invalid employee id format')
+            .optional()
+            .nullable(),
 
         leave_type_id: z.string()
             .min(1, 'Leave type id is required')

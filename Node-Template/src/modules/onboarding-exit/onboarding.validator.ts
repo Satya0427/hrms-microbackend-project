@@ -13,36 +13,36 @@ const objectId = z
 /* ================= PERSONAL DETAILS ================= */
 
 export const employeePersonalSchema = z.object({
-  profileImage: z.string().optional(),
-  firstName: z.string().min(2).max(50),
-  lastName: z.string().min(2).max(50),
-  email: z.string().email().optional(),
-  phone: z.string().min(10).max(15),
-  dob: z.coerce.date().optional(),
-  gender: z.string(),
-  address: z.string().max(250).optional(),
-  maritalStatus: z.string().max(30).optional(),
-  nationality: z.string().max(50).optional(),
+  profileImage: z.string().optional().nullable(),
+  firstName: z.string().min(1).max(50).nullable(),
+  lastName: z.string().min(1).max(50).optional().nullable(),
+  email: z.string().email().optional().nullable(),
+  phone: z.string().min(10).max(15).nullable(),
+  dob: z.coerce.date().optional().nullable(),
+  gender: z.string().nullable(),
+  address: z.string().max(250).optional().nullable(),
+  maritalStatus: z.string().max(30).optional().nullable(),
+  nationality: z.string().max(50).optional().nullable(),
   password: z.string().min(6).max(100).optional().nullable()
 });
 
 /* ================= JOB DETAILS ================= */
 
 export const employeeJobSchema = z.object({
-  designation_id: z.string().optional(),
-  department_id: z.string().optional(),
+  designation_id: z.string().optional().nullable(),
+  department_id: z.string().optional().nullable(),
   joiningDate: z.coerce.date(),
   workEmail: z.string().email(),
   reported_to: z.string().optional().nullable(),
-  work_location: z.string().max(100).optional(),
-  workMode: z.string().max(50).optional(),
+  work_location: z.string().max(100).optional().nullable(),
+  workMode: z.string().max(50).optional().nullable(),
   role_id: z.string().optional().nullable(),
-  probationStartDate: z.coerce.date().optional(),
-  probationEndDate: z.coerce.date().optional(),
-  probationStatus: z.string().max(30).optional(),
-  probationNotes: z.string().max(500).optional(),
+  probationStartDate: z.coerce.date().optional().nullable(),
+  probationEndDate: z.coerce.date().optional().nullable(),
+  probationStatus: z.string().max(30).optional().nullable(),
+  probationNotes: z.string().max(500).optional().nullable(),
   employee_id: z.string().min(3).max(30),
-  employmentType: z.string().max(50).optional(),
+  employmentType: z.string().max(50).optional().nullable(),
   shift_id: z.string().optional().nullable()
 });
 
@@ -51,7 +51,7 @@ export const employeeJobSchema = z.object({
 export const employeeEmergencySchema = z.object({
   contactName: z.string().min(2).max(100),
   relation: z.string().max(50),
-  phone: z.string().min(10).max(15)
+  phone: z.string().min(10).max(15).nullable()
 });
 
 /* ================= MAIN CREATE SCHEMA ================= */

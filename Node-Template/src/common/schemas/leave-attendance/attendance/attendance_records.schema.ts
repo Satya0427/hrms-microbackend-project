@@ -45,7 +45,8 @@ const ATTENDANCE_RECORD_SCHEMA = new mongoose.Schema(
                 'HALF_DAY',
                 'HOLIDAY',
                 'WEEKLY_OFF',
-                'ON_LEAVE'
+                'ON_LEAVE',
+                'WFH',
             ],
             required: true
         },

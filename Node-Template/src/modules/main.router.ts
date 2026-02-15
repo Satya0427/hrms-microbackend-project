@@ -10,6 +10,7 @@ import { ONBOARDING_ROUTER } from './onboarding-exit/onboarding.routes';
 import COMMON_ROUTER from '../common/controllers/common.router';
 import LEAVE_CONFIG_ROUTER from './attendance_leave/leave/leave_config.router';
 import ATTENDANCE_ROUTER from './attendance_leave/attendance/attendance.router';
+import PAYROLL_STRUCTURE_ROUTER from './payroll_module/payroll_structure/payroll_structure.router';
 const main_router: Router = express.Router();
 
 main_router.use('/auth', auth_router);
@@ -21,5 +22,6 @@ main_router.use('/module-feature', MODULE_FEATURES_ROUTER);
 main_router.use('/onboarding', ONBOARDING_ROUTER);
 main_router.use('/leave-config', LEAVE_CONFIG_ROUTER);
 main_router.use('/attendance', ATTENDANCE_ROUTER);
+main_router.use('/payroll', PAYROLL_STRUCTURE_ROUTER);
 
 export default main_router;

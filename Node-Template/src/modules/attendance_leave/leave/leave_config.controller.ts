@@ -29,6 +29,7 @@ import {
     updateLeaveRequestStatusSchema,
     listLeaveRequestsSchema
 } from './leave_config.validator';
+import { getManagerAndRoleByEmployeeUuid } from '../../../common/utils/common';
 
 interface CustomRequest extends Request {
     user?: {
@@ -75,7 +76,6 @@ const createLeaveTypeAPIHandler = async_error_handler(async (req: CustomRequest,
         res.status(400).json(apiResponse(400, 'Organization id is required'));
         return;
     }
-
     const normalizedName = String(name).trim();
     const normalizedCode = String(code).trim().toUpperCase();
 
@@ -98,7 +98,7 @@ const createLeaveTypeAPIHandler = async_error_handler(async (req: CustomRequest,
         color,
         description,
         is_system,
-        is_active
+        is_active,
     };
 
     if (id) {
@@ -1033,8 +1033,7 @@ const applyLeaveAPIHandler = async_error_handler(async (req: CustomRequest, res:
         res.status(400).json(apiResponse(400, 'Organization id is required'));
         return;
     }
-
-    const {
+    let {
         employee_id,
         leave_type_id,
         from_date,
@@ -1044,6 +1043,14 @@ const applyLeaveAPIHandler = async_error_handler(async (req: CustomRequest, res:
         reason
     } = validation.data?.body || {};
 
+    if (!employee_id) {
+        employee_id = req.user?.user_id;
+    }
+    if (!employee_id) {
+        res.status(400).json(apiResponse(400, 'Employee id is required'));
+        return;
+    }
+    const employee_details = await getManagerAndRoleByEmployeeUuid(employee_id, organization_id);
     const fromDate = new Date(from_date);
     const toDate = new Date(to_date);
     if (fromDate > toDate) {
@@ -1058,7 +1065,7 @@ const applyLeaveAPIHandler = async_error_handler(async (req: CustomRequest, res:
 
     const employee = await EMPLOYEE_PROFILE_MODEL.findOne({
         _id: new Types.ObjectId(employee_id),
-        organization_id: new Types.ObjectId(organization_id),
+        organization_id: organization_id,
         is_deleted: false
     });
 
@@ -1068,7 +1075,7 @@ const applyLeaveAPIHandler = async_error_handler(async (req: CustomRequest, res:
     }
 
     const policy = await LEAVE_POLICY_MODEL.findOne({
-        organization_id: new Types.ObjectId(organization_id),
+        organization_id: organization_id,
         status: 'ACTIVE',
         effective_from: { $lte: fromDate },
         $or: [
@@ -1101,7 +1108,7 @@ const applyLeaveAPIHandler = async_error_handler(async (req: CustomRequest, res:
     }
 
     const overlap = await LEAVE_REQUEST_MODEL.findOne({
-        organization_id: new Types.ObjectId(organization_id),
+        organization_id: organization_id,
         employee_uuid: new Types.ObjectId(employee._id),
         status: { $in: ['SUBMITTED', 'APPROVED'] },
         from_date: { $lte: toDate },
@@ -1193,6 +1200,7 @@ const applyLeaveAPIHandler = async_error_handler(async (req: CustomRequest, res:
         organization_id: new Types.ObjectId(organization_id),
         employee_uuid: new Types.ObjectId(employee._id),
         leave_type_id: new Types.ObjectId(leave_type_id),
+        manager_id: employee_details?.manager_id ? new Types.ObjectId(employee_details.manager_id) : undefined,
         policy_id: new Types.ObjectId(policy._id),
         from_date: fromDate,
         to_date: toDate,
