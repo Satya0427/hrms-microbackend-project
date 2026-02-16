@@ -711,7 +711,7 @@ const getTemplateByIdAPIHandler = async_error_handler(async (req: CustomRequest,
         is_deleted: false
     })
         .populate('earnings.component_id', 'component_name component_code component_type calculation_type is_basic')
-        .populate('deductions.component_id', 'component_name component_code component_type deduction_nature')
+        .populate('deductions.component_id', 'component_name component_code component_type calculation_type deduction_nature')
         .lean();
 
     if (!template) {

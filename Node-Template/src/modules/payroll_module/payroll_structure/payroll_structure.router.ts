@@ -148,7 +148,7 @@ PAYROLL_STRUCTURE_ROUTER.post(
     deleteTemplateAPIHandler
 );
 
-// 8️⃣ Get Templates for Assignment Dropdown
+//  Get Templates for Assignment Dropdown
 PAYROLL_STRUCTURE_ROUTER.post(
     '/template/for_assignment',
     accessTokenValidatorMiddleware,

@@ -26,7 +26,7 @@ const EMPLOYEE_ASSIGNMENT_ROUTER: Router = express.Router();
 // 🔹 EMPLOYEE SALARY ASSIGNMENT ROUTES
 // ========================================
 
-// 1️⃣ Assign Salary to Employee
+//  Assign Salary to Employee
 EMPLOYEE_ASSIGNMENT_ROUTER.post(
     '/assign',
     accessTokenValidatorMiddleware,
@@ -34,7 +34,7 @@ EMPLOYEE_ASSIGNMENT_ROUTER.post(
     assignSalaryAPIHandler
 );
 
-// 2️⃣ Get Employee Current Salary
+//  Get Employee Current Salary
 EMPLOYEE_ASSIGNMENT_ROUTER.post(
     '/get-salary',
     accessTokenValidatorMiddleware,
@@ -42,7 +42,7 @@ EMPLOYEE_ASSIGNMENT_ROUTER.post(
     getEmployeeSalaryAPIHandler
 );
 
-// 3️⃣ Revise Salary (Create new version)
+//  Revise Salary (Create new version)
 EMPLOYEE_ASSIGNMENT_ROUTER.post(
     '/revise',
     accessTokenValidatorMiddleware,
@@ -50,7 +50,7 @@ EMPLOYEE_ASSIGNMENT_ROUTER.post(
     reviseSalaryAPIHandler
 );
 
-// 4️⃣ Get Salary History
+//  Get Salary History
 EMPLOYEE_ASSIGNMENT_ROUTER.post(
     '/history',
     accessTokenValidatorMiddleware,
@@ -58,7 +58,7 @@ EMPLOYEE_ASSIGNMENT_ROUTER.post(
     getSalaryHistoryAPIHandler
 );
 
-// 5️⃣ Get All Assignments
+// Get All Assignments
 EMPLOYEE_ASSIGNMENT_ROUTER.post(
     '/get_list',
     accessTokenValidatorMiddleware,
@@ -66,7 +66,7 @@ EMPLOYEE_ASSIGNMENT_ROUTER.post(
     getAllAssignmentsAPIHandler
 );
 
-// 6️⃣ Get Assignment by ID
+//  Get Assignment by ID
 EMPLOYEE_ASSIGNMENT_ROUTER.post(
     '/get_by_employee_id',
     accessTokenValidatorMiddleware,
@@ -74,7 +74,7 @@ EMPLOYEE_ASSIGNMENT_ROUTER.post(
     getAssignmentByIdAPIHandler
 );
 
-// 7️⃣ Deactivate Salary Assignment
+// Deactivate Salary Assignment
 EMPLOYEE_ASSIGNMENT_ROUTER.post(
     '/deactivate',
     accessTokenValidatorMiddleware,

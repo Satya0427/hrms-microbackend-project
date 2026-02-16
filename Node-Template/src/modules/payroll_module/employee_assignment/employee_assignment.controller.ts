@@ -19,7 +19,7 @@ interface CustomRequest extends Request {
 // 🔹 EMPLOYEE SALARY ASSIGNMENT REGION
 // ========================================
 
-// 1️⃣ ASSIGN SALARY TO EMPLOYEE
+// ASSIGN SALARY TO EMPLOYEE
 const assignSalaryAPIHandler = async_error_handler(async (req: CustomRequest, res: Response) => {
     const organization_id = req.user?.organization_id;
     const user_id = req.user?.user_id;
@@ -36,10 +36,12 @@ const assignSalaryAPIHandler = async_error_handler(async (req: CustomRequest, re
         monthly_gross,
         effective_from,
         payroll_start_month,
-        status
+        status,
+        earnings_snapshot,
+        deductions_snapshot
     } = req.body;
 
-    // 🔴 BUSINESS LOGIC 1: Only one active salary record per employee
+    //  BUSINESS LOGIC 1: Only one active salary record per employee
     const existingActive = await EMPLOYEE_SALARY_ASSIGNMENT_MODEL.findOne({
         organization_id: new Types.ObjectId(organization_id),
         employee_id: new Types.ObjectId(employee_id),
@@ -52,7 +54,7 @@ const assignSalaryAPIHandler = async_error_handler(async (req: CustomRequest, re
         return;
     }
 
-    // 🔴 BUSINESS LOGIC 2: Verify template exists and is active
+    //  BUSINESS LOGIC 2: Verify template exists and is active
     const template = await PAYROLL_SALARY_TEMPLATE_MODEL.findOne({
         _id: new Types.ObjectId(template_id),
         organization_id: new Types.ObjectId(organization_id),
@@ -65,125 +67,59 @@ const assignSalaryAPIHandler = async_error_handler(async (req: CustomRequest, re
         return;
     }
 
-    // 🔴 BUSINESS LOGIC 3: Template must have components
-    if (!template.earnings || template.earnings.length === 0) {
-        res.status(400).json(apiResponse(400, 'Selected template has no earnings components configured'));
+    //  BUSINESS LOGIC 3: Validate earnings snapshot is provided
+    if (!earnings_snapshot || earnings_snapshot.length === 0) {
+        res.status(400).json(apiResponse(400, 'Earnings snapshot is required and cannot be empty'));
         return;
     }
 
-    // 🔴 BUSINESS LOGIC 4: Fetch and validate all components
-    const allComponentIds = [
-        ...template.earnings.map(e => new Types.ObjectId(e.component_id)),
-        ...template.deductions.map(d => new Types.ObjectId(d.component_id))
-    ];
-
-    const components = await PAYROLL_SALARY_COMPONENT_MODEL.find({
-        _id: { $in: allComponentIds },
-        organization_id: new Types.ObjectId(organization_id),
-        is_deleted: false
-    }).lean();
-
-    if (components.length !== allComponentIds.length) {
-        res.status(400).json(apiResponse(400, 'One or more components in template not found'));
+    //  BUSINESS LOGIC 4: Validate deductions snapshot is provided
+    if (!deductions_snapshot || deductions_snapshot.length === 0) {
+        res.status(400).json(apiResponse(400, 'Deductions snapshot is required and cannot be empty'));
         return;
     }
 
-    // 🔴 BUSINESS LOGIC 5: Create earnings snapshot
-    const earningsSnapshot: IEarningsSnapshot[] = [];
-    let totalEarningsMonthly = 0;
-    let totalEarningsAnnual = 0;
-
-    for (const earning of template.earnings) {
-        const component = components.find(c => c._id.equals(earning.component_id));
-        if (!component) continue;
-
-        let monthlyValue = 0;
-        let annualValue = 0;
-
-        if (earning.value_type === 'fixed') {
-            monthlyValue = earning.fixed_amount || 0;
-            annualValue = monthlyValue * 12;
-        } else if (earning.value_type === 'percentage') {
-            // Calculate percentage of annual CTC
-            annualValue = (annual_ctc * (earning.percentage || 0)) / 100;
-            monthlyValue = annualValue / 12;
-        } else {
-            // For formula or other types
-            monthlyValue = earning.fixed_amount || 0;
-            annualValue = monthlyValue * 12;
-        }
-
-        totalEarningsMonthly += monthlyValue;
-        totalEarningsAnnual += annualValue;
-
-        earningsSnapshot.push({
-            component_id: new Types.ObjectId(earning.component_id),
-            component_code: component.component_code,
-            component_name: component.component_name,
-            value_type: earning.value_type as 'FIXED' | 'PERCENTAGE',
-            fixed_amount: earning.fixed_amount,
-            percentage: earning.percentage,
-            formula: earning.formula,
-            monthly_value: Math.round(monthlyValue * 100) / 100,
-            annual_value: Math.round(annualValue * 100) / 100,
-            override_allowed: earning.override_allowed,
-            is_mandatory: earning.is_mandatory,
-            calculation_order: earning.calculation_order
-        });
-    }
-
-    // 🔴 BUSINESS LOGIC 6: Create deductions snapshot
-    const deductionsSnapshot: IDeductionsSnapshot[] = [];
-    let totalDeductionsMonthly = 0;
-
-    for (const deduction of template.deductions) {
-        const component = components.find(c => c._id.equals(deduction.component_id));
-        if (!component) continue;
-
-        let monthlyValue = 0;
-
-        if (component.calculation_type === 'fixed') {
-            monthlyValue = component.fixed_amount || 0;
-        } else if (component.calculation_type === 'percentage_of_basic') {
-            if (component.percentage !== undefined) {
-                const basicComponent = components.find(c => c.is_basic === true);
-                if (basicComponent) {
-                    const basicMonthly = basicComponent.fixed_amount || 0;
-                    monthlyValue = (basicMonthly * component.percentage) / 100;
-                    
-                    // Apply max cap if exists
-                    if (component.max_cap && monthlyValue > component.max_cap) {
-                        monthlyValue = component.max_cap;
-                    }
-                }
-            }
-        }
-
-        totalDeductionsMonthly += monthlyValue;
-
-        deductionsSnapshot.push({
-            component_id: new Types.ObjectId(deduction.component_id),
-            component_code: component.component_code,
-            component_name: component.component_name,
-            deduction_nature: component.deduction_nature,
-            calculation_type: component.calculation_type,
-            percentage: component.percentage,
-            fixed_amount: component.fixed_amount,
-            formula: component.formula,
-            employer_contribution: component.employer_contribution,
-            employee_contribution: component.employee_contribution,
-            max_cap: component.max_cap,
-            monthly_value: Math.round(monthlyValue * 100) / 100,
-            override_allowed: deduction.override_allowed
-        });
-    }
-
-    // 🔴 BUSINESS LOGIC 7: Validate CTC matches earnings
+    //  BUSINESS LOGIC 5: Validate annual CTC matches total earnings
+    const totalEarningsAnnual = earnings_snapshot.reduce((sum: number, e: any) => sum + (e.annual_value || 0), 0);
     const ctcTolerance = annual_ctc * 0.02; // 2% tolerance
+    
     if (Math.abs(totalEarningsAnnual - annual_ctc) > ctcTolerance) {
         res.status(400).json(apiResponse(400, `CTC mismatch. Earnings total: ${totalEarningsAnnual}, Expected: ${annual_ctc}`));
         return;
     }
+
+    //  BUSINESS LOGIC 6: Transform and normalize earnings snapshot
+    const normalizedEarningsSnapshot: IEarningsSnapshot[] = earnings_snapshot.map((earning: any) => ({
+        component_id: new Types.ObjectId(earning.component_id),
+        component_code: earning.component_code,
+        component_name: earning.component_name,
+        value_type: earning.value_type as 'FIXED' | 'PERCENTAGE',
+        fixed_amount: earning.fixed_amount,
+        percentage: earning.percentage,
+        formula: earning.formula,
+        monthly_value: Math.round(earning.monthly_value * 100) / 100,
+        annual_value: Math.round(earning.annual_value * 100) / 100,
+        override_allowed: earning.override_allowed !== undefined ? earning.override_allowed : true,
+        is_mandatory: earning.is_mandatory || false,
+        calculation_order: earning.calculation_order || 0
+    }));
+
+    //  BUSINESS LOGIC 7: Transform and normalize deductions snapshot
+    const normalizedDeductionsSnapshot: IDeductionsSnapshot[] = deductions_snapshot.map((deduction: any) => ({
+        component_id: new Types.ObjectId(deduction.component_id),
+        component_code: deduction.component_code,
+        component_name: deduction.component_name,
+        deduction_nature: deduction.deduction_nature,
+        calculation_type: deduction.calculation_type,
+        percentage: deduction.percentage,
+        fixed_amount: deduction.fixed_amount,
+        formula: deduction.formula,
+        employer_contribution: deduction.employer_contribution || 0,
+        employee_contribution: deduction.employee_contribution || 0,
+        max_cap: deduction.max_cap,
+        monthly_value: Math.round(deduction.monthly_value * 100) / 100,
+        override_allowed: deduction.override_allowed !== undefined ? deduction.override_allowed : true
+    }));
 
     // Create assignment with snapshots
     const assignmentPayload: any = {
@@ -195,8 +131,8 @@ const assignSalaryAPIHandler = async_error_handler(async (req: CustomRequest, re
         effective_from: new Date(effective_from),
         status: status || 'ACTIVE',
         version: 1,
-        earnings_snapshot: earningsSnapshot,
-        deductions_snapshot: deductionsSnapshot,
+        earnings_snapshot: normalizedEarningsSnapshot,
+        deductions_snapshot: normalizedDeductionsSnapshot,
         is_active: true,
         is_deleted: false,
         created_by: new Types.ObjectId(user_id)
@@ -219,7 +155,7 @@ const assignSalaryAPIHandler = async_error_handler(async (req: CustomRequest, re
     }));
 });
 
-// 2️⃣ GET EMPLOYEE CURRENT SALARY
+//  GET EMPLOYEE CURRENT SALARY
 const getEmployeeSalaryAPIHandler = async_error_handler(async (req: CustomRequest, res: Response) => {
     const organization_id = req.user?.organization_id;
     const { employee_id } = req.body;
@@ -235,8 +171,8 @@ const getEmployeeSalaryAPIHandler = async_error_handler(async (req: CustomReques
         is_active: true,
         is_deleted: false
     })
-    .populate('template_id', 'template_name template_code status')
-    .lean();
+        .populate('template_id', 'template_name template_code status')
+        .lean();
 
     if (!assignment) {
         res.status(404).json(apiResponse(404, 'No active salary assignment found for this employee'));
@@ -270,7 +206,7 @@ const getEmployeeSalaryAPIHandler = async_error_handler(async (req: CustomReques
     res.status(200).json(apiDataResponse(200, MESSAGES.SUCCESS, enhancedAssignment));
 });
 
-// 3️⃣ REVISE SALARY (Create new version, deactivate old)
+//  EVISE SALARY (Create new version, deactivate old)
 const reviseSalaryAPIHandler = async_error_handler(async (req: CustomRequest, res: Response) => {
     const organization_id = req.user?.organization_id;
     const user_id = req.user?.user_id;
@@ -307,8 +243,8 @@ const reviseSalaryAPIHandler = async_error_handler(async (req: CustomRequest, re
     const newMonthlyGross = monthly_gross || currentAssignment.monthly_gross;
 
     // If template changed, fetch and validate new template
-    let template = currentAssignment.template_id.equals(newTemplateId) 
-        ? null 
+    let template = currentAssignment.template_id.equals(newTemplateId)
+        ? null
         : await PAYROLL_SALARY_TEMPLATE_MODEL.findOne({
             _id: new Types.ObjectId(newTemplateId),
             organization_id: new Types.ObjectId(organization_id),
@@ -462,7 +398,7 @@ const reviseSalaryAPIHandler = async_error_handler(async (req: CustomRequest, re
     }));
 });
 
-// 4️⃣ GET SALARY HISTORY
+//  GET SALARY HISTORY
 const getSalaryHistoryAPIHandler = async_error_handler(async (req: CustomRequest, res: Response) => {
     const organization_id = req.user?.organization_id;
     const { employee_id, page, limit } = req.body;
@@ -506,7 +442,7 @@ const getSalaryHistoryAPIHandler = async_error_handler(async (req: CustomRequest
     }));
 });
 
-// 5️⃣ GET ALL ASSIGNMENTS (Employee List)
+//  GET ALL ASSIGNMENTS (Employee List)
 const getAllAssignmentsAPIHandler = async_error_handler(async (req: CustomRequest, res: Response) => {
     const organization_id = req.user?.organization_id;
     const { status, search, department_id, page, limit } = req.body;
@@ -566,7 +502,7 @@ const getAllAssignmentsAPIHandler = async_error_handler(async (req: CustomReques
     }));
 });
 
-// 6️⃣ GET ASSIGNMENT BY ID
+//  GET ASSIGNMENT BY ID
 const getAssignmentByIdAPIHandler = async_error_handler(async (req: CustomRequest, res: Response) => {
     const organization_id = req.user?.organization_id;
     const { id } = req.body;
@@ -581,9 +517,9 @@ const getAssignmentByIdAPIHandler = async_error_handler(async (req: CustomReques
         organization_id: new Types.ObjectId(organization_id),
         is_deleted: false
     })
-    .populate('employee_id', 'employee_name employee_id department_id designation_id email')
-    .populate('template_id', 'template_name template_code status')
-    .lean();
+        .populate('employee_id', 'employee_name employee_id department_id designation_id email')
+        .populate('template_id', 'template_name template_code status')
+        .lean();
 
     if (!assignment) {
         res.status(404).json(apiResponse(404, 'Assignment not found'));
@@ -618,7 +554,7 @@ const getAssignmentByIdAPIHandler = async_error_handler(async (req: CustomReques
     res.status(200).json(apiDataResponse(200, MESSAGES.SUCCESS, enhancedAssignment));
 });
 
-// 7️⃣ DEACTIVATE SALARY
+//  DEACTIVATE SALARY
 const deactivateSalaryAPIHandler = async_error_handler(async (req: CustomRequest, res: Response) => {
     const organization_id = req.user?.organization_id;
     const user_id = req.user?.user_id;
