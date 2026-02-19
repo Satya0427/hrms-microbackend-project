@@ -1,13 +1,15 @@
 import mongoose, { Schema, Types, Document } from "mongoose";
 
 export type AssignmentStatusType = "ACTIVE" | "INACTIVE" | "REVISED";
+export type EarningValueType = "fixed" | "percentage" | "formula" | "FIXED" | "PERCENTAGE" | "FORMULA";
+export type DeductionCalculationType = "fixed" | "percentage" | "percentage_of_basic" | "formula";
 
 // Earnings Snapshot in Assignment
 export interface IEarningsSnapshot {
     component_id: Types.ObjectId;
     component_code: string;
     component_name: string;
-    value_type: "FIXED" | "PERCENTAGE";
+    value_type: EarningValueType;
     fixed_amount?: number;
     percentage?: number;
     formula?: string;
@@ -24,12 +26,12 @@ export interface IDeductionsSnapshot {
     component_code: string;
     component_name: string;
     deduction_nature?: "statutory" | "non_statutory";
-    calculation_type: "fixed" | "percentage_of_basic" | "formula";
+    calculation_type: DeductionCalculationType;
     percentage?: number;
     fixed_amount?: number;
     formula?: string;
-    employer_contribution?: boolean;
-    employee_contribution?: boolean;
+    employer_contribution?: number;
+    employee_contribution?: number;
     max_cap?: number;
     monthly_value: number;
     override_allowed: boolean;
@@ -48,6 +50,7 @@ export interface IEmployeeSalaryAssignment extends Document {
     
     // Assignment Details
     effective_from: Date;
+    payroll_start_month?: Date | null;
     status: AssignmentStatusType;
     version: number;
     
@@ -90,7 +93,7 @@ const EarningsSnapshotSchema = new Schema({
     },
     value_type: {
         type: String,
-        enum: ["FIXED", "PERCENTAGE"],
+        enum: ["fixed", "percentage", "formula", "FIXED", "PERCENTAGE", "FORMULA"],
         required: true
     },
     fixed_amount: Number,
@@ -147,7 +150,7 @@ const DeductionsSnapshotSchema = new Schema({
     },
     calculation_type: {
         type: String,
-        enum: ["fixed", "percentage_of_basic", "formula"],
+        enum: ["fixed", "percentage", "percentage_of_basic", "formula"],
         required: true
     },
     percentage: {
@@ -157,8 +160,14 @@ const DeductionsSnapshotSchema = new Schema({
     },
     fixed_amount: Number,
     formula: String,
-    employer_contribution: Boolean,
-    employee_contribution: Boolean,
+    employer_contribution: {
+        type: Number,
+        default: 0
+    },
+    employee_contribution: {
+        type: Number,
+        default: 0
+    },
     max_cap: Number,
     monthly_value: {
         type: Number,
@@ -179,7 +188,7 @@ const EMPLOYEE_SALARY_ASSIGNMENT_SCHEMA = new Schema(
             index: true
         },
         
-        employee_id: {
+        employee_uuid: {
             type: Types.ObjectId,
             ref: "employees",
             required: true
@@ -206,6 +215,11 @@ const EMPLOYEE_SALARY_ASSIGNMENT_SCHEMA = new Schema(
         effective_from: {
             type: Date,
             required: true
+        },
+
+        payroll_start_month: {
+            type: Date,
+            default: null
         },
         
         status: {

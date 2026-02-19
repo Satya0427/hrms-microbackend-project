@@ -15,6 +15,22 @@ interface CustomRequest extends Request {
     };
 }
 
+const normalizeEarningValueType = (valueType: string): IEarningsSnapshot['value_type'] => {
+    const normalized = valueType?.toLowerCase();
+    if (normalized === 'fixed' || normalized === 'percentage' || normalized === 'formula') {
+        return normalized;
+    }
+    return 'fixed';
+};
+
+const normalizeDeductionCalculationType = (calculationType: string): IDeductionsSnapshot['calculation_type'] => {
+    const normalized = calculationType?.toLowerCase();
+    if (normalized === 'fixed' || normalized === 'percentage' || normalized === 'percentage_of_basic' || normalized === 'formula') {
+        return normalized;
+    }
+    return 'fixed';
+};
+
 // ========================================
 // 🔹 EMPLOYEE SALARY ASSIGNMENT REGION
 // ========================================
@@ -30,7 +46,7 @@ const assignSalaryAPIHandler = async_error_handler(async (req: CustomRequest, re
     }
 
     const {
-        employee_id,
+        employee_uuid,
         template_id,
         annual_ctc,
         monthly_gross,
@@ -44,7 +60,7 @@ const assignSalaryAPIHandler = async_error_handler(async (req: CustomRequest, re
     //  BUSINESS LOGIC 1: Only one active salary record per employee
     const existingActive = await EMPLOYEE_SALARY_ASSIGNMENT_MODEL.findOne({
         organization_id: new Types.ObjectId(organization_id),
-        employee_id: new Types.ObjectId(employee_id),
+        employee_uuid: new Types.ObjectId(employee_uuid),
         is_active: true,
         is_deleted: false
     });
@@ -82,7 +98,7 @@ const assignSalaryAPIHandler = async_error_handler(async (req: CustomRequest, re
     //  BUSINESS LOGIC 5: Validate annual CTC matches total earnings
     const totalEarningsAnnual = earnings_snapshot.reduce((sum: number, e: any) => sum + (e.annual_value || 0), 0);
     const ctcTolerance = annual_ctc * 0.02; // 2% tolerance
-    
+
     if (Math.abs(totalEarningsAnnual - annual_ctc) > ctcTolerance) {
         res.status(400).json(apiResponse(400, `CTC mismatch. Earnings total: ${totalEarningsAnnual}, Expected: ${annual_ctc}`));
         return;
@@ -93,7 +109,7 @@ const assignSalaryAPIHandler = async_error_handler(async (req: CustomRequest, re
         component_id: new Types.ObjectId(earning.component_id),
         component_code: earning.component_code,
         component_name: earning.component_name,
-        value_type: earning.value_type as 'FIXED' | 'PERCENTAGE',
+        value_type: normalizeEarningValueType(earning.value_type),
         fixed_amount: earning.fixed_amount,
         percentage: earning.percentage,
         formula: earning.formula,
@@ -110,12 +126,12 @@ const assignSalaryAPIHandler = async_error_handler(async (req: CustomRequest, re
         component_code: deduction.component_code,
         component_name: deduction.component_name,
         deduction_nature: deduction.deduction_nature,
-        calculation_type: deduction.calculation_type,
+        calculation_type: normalizeDeductionCalculationType(deduction.calculation_type),
         percentage: deduction.percentage,
         fixed_amount: deduction.fixed_amount,
         formula: deduction.formula,
-        employer_contribution: deduction.employer_contribution || 0,
-        employee_contribution: deduction.employee_contribution || 0,
+        employer_contribution: typeof deduction.employer_contribution === 'number' ? deduction.employer_contribution : Number(deduction.employer_contribution) || 0,
+        employee_contribution: typeof deduction.employee_contribution === 'number' ? deduction.employee_contribution : Number(deduction.employee_contribution) || 0,
         max_cap: deduction.max_cap,
         monthly_value: Math.round(deduction.monthly_value * 100) / 100,
         override_allowed: deduction.override_allowed !== undefined ? deduction.override_allowed : true
@@ -124,11 +140,12 @@ const assignSalaryAPIHandler = async_error_handler(async (req: CustomRequest, re
     // Create assignment with snapshots
     const assignmentPayload: any = {
         organization_id: new Types.ObjectId(organization_id),
-        employee_id: new Types.ObjectId(employee_id),
+        employee_uuid: new Types.ObjectId(employee_uuid),
         template_id: new Types.ObjectId(template_id),
         annual_ctc,
         monthly_gross: Math.round(monthly_gross * 100) / 100,
         effective_from: new Date(effective_from),
+        payroll_start_month: payroll_start_month ? new Date(payroll_start_month) : null,
         status: status || 'ACTIVE',
         version: 1,
         earnings_snapshot: normalizedEarningsSnapshot,
@@ -141,7 +158,7 @@ const assignSalaryAPIHandler = async_error_handler(async (req: CustomRequest, re
     const assignment = new EMPLOYEE_SALARY_ASSIGNMENT_MODEL(assignmentPayload);
     const created = await assignment.save();
 
-    // 🔴 UPDATE TEMPLATE: Increment employees_count
+    //  UPDATE TEMPLATE: Increment employees_count
     await PAYROLL_SALARY_TEMPLATE_MODEL.updateOne(
         { _id: new Types.ObjectId(template_id) },
         { $inc: { employees_count: 1 } }
@@ -158,7 +175,7 @@ const assignSalaryAPIHandler = async_error_handler(async (req: CustomRequest, re
 //  GET EMPLOYEE CURRENT SALARY
 const getEmployeeSalaryAPIHandler = async_error_handler(async (req: CustomRequest, res: Response) => {
     const organization_id = req.user?.organization_id;
-    const { employee_id } = req.body;
+    const { employee_uuid } = req.body;
 
     if (!organization_id) {
         res.status(400).json(apiResponse(400, 'Organization Id is required'));
@@ -167,7 +184,7 @@ const getEmployeeSalaryAPIHandler = async_error_handler(async (req: CustomReques
 
     const assignment = await EMPLOYEE_SALARY_ASSIGNMENT_MODEL.findOne({
         organization_id: new Types.ObjectId(organization_id),
-        employee_id: new Types.ObjectId(employee_id),
+        employee_uuid: new Types.ObjectId(employee_uuid),
         is_active: true,
         is_deleted: false
     })
@@ -210,7 +227,7 @@ const getEmployeeSalaryAPIHandler = async_error_handler(async (req: CustomReques
 const reviseSalaryAPIHandler = async_error_handler(async (req: CustomRequest, res: Response) => {
     const organization_id = req.user?.organization_id;
     const user_id = req.user?.user_id;
-    const { employee_id, template_id, annual_ctc, monthly_gross, effective_from, earnings_overrides, reason } = req.body;
+    const { employee_uuid, template_id, annual_ctc, monthly_gross, effective_from, payroll_start_month, earnings_overrides, reason } = req.body;
 
     if (!organization_id) {
         res.status(400).json(apiResponse(400, 'Organization Id is required'));
@@ -220,7 +237,7 @@ const reviseSalaryAPIHandler = async_error_handler(async (req: CustomRequest, re
     // Get current active assignment
     const currentAssignment = await EMPLOYEE_SALARY_ASSIGNMENT_MODEL.findOne({
         organization_id: new Types.ObjectId(organization_id),
-        employee_id: new Types.ObjectId(employee_id),
+        employee_uuid: new Types.ObjectId(employee_uuid),
         is_active: true,
         is_deleted: false
     });
@@ -264,8 +281,8 @@ const reviseSalaryAPIHandler = async_error_handler(async (req: CustomRequest, re
 
     // Fetch components
     const allComponentIds = [
-        ...template!.earnings.map(e => new Types.ObjectId(e.component_id)),
-        ...template!.deductions.map(d => new Types.ObjectId(d.component_id))
+        ...template!.earnings.map((e:any) => new Types.ObjectId(e.component_id)),
+        ...template!.deductions.map((d:any) => new Types.ObjectId(d.component_id))
     ];
 
     const components = await PAYROLL_SALARY_COMPONENT_MODEL.find({
@@ -308,7 +325,7 @@ const reviseSalaryAPIHandler = async_error_handler(async (req: CustomRequest, re
             component_id: new Types.ObjectId(earning.component_id),
             component_code: component.component_code,
             component_name: component.component_name,
-            value_type: earning.value_type as 'FIXED' | 'PERCENTAGE',
+            value_type: normalizeEarningValueType(earning.value_type),
             fixed_amount: earning.fixed_amount,
             percentage: earning.percentage,
             formula: earning.formula,
@@ -347,12 +364,12 @@ const reviseSalaryAPIHandler = async_error_handler(async (req: CustomRequest, re
             component_code: component.component_code,
             component_name: component.component_name,
             deduction_nature: component.deduction_nature,
-            calculation_type: component.calculation_type,
+            calculation_type: normalizeDeductionCalculationType(component.calculation_type),
             percentage: component.percentage,
             fixed_amount: component.fixed_amount,
             formula: component.formula,
-            employer_contribution: component.employer_contribution,
-            employee_contribution: component.employee_contribution,
+            employer_contribution: typeof component.employer_contribution === 'number' ? component.employer_contribution : Number(component.employer_contribution) || 0,
+            employee_contribution: typeof component.employee_contribution === 'number' ? component.employee_contribution : Number(component.employee_contribution) || 0,
             max_cap: component.max_cap,
             monthly_value: Math.round(monthlyValue * 100) / 100,
             override_allowed: deduction.override_allowed
@@ -374,11 +391,12 @@ const reviseSalaryAPIHandler = async_error_handler(async (req: CustomRequest, re
     // Create new revised assignment
     const revisedAssignmentPayload: any = {
         organization_id: new Types.ObjectId(organization_id),
-        employee_id: new Types.ObjectId(employee_id),
+        employee_uuid: new Types.ObjectId(employee_uuid),
         template_id: new Types.ObjectId(newTemplateId),
         annual_ctc: newAnnualCtc,
         monthly_gross: newMonthlyGross,
         effective_from: effectiveDate,
+        payroll_start_month: payroll_start_month ? new Date(payroll_start_month) : (currentAssignment.payroll_start_month || null),
         status: 'ACTIVE',
         version: (currentAssignment.version || 0) + 1,
         earnings_snapshot: newEarningsSnapshot,
@@ -401,20 +419,20 @@ const reviseSalaryAPIHandler = async_error_handler(async (req: CustomRequest, re
 //  GET SALARY HISTORY
 const getSalaryHistoryAPIHandler = async_error_handler(async (req: CustomRequest, res: Response) => {
     const organization_id = req.user?.organization_id;
-    const { employee_id, page, limit } = req.body;
+    const { employee_uuid, page, limit } = req.body;
 
     if (!organization_id) {
         res.status(400).json(apiResponse(400, 'Organization Id is required'));
         return;
     }
 
-    const pageNum = parseInt(page as string) || 1;
-    const limitNum = parseInt(limit as string) || 10;
+    const pageNum = Number(page) || 1;
+    const limitNum = Number(limit) || 10;
     const skip = (pageNum - 1) * limitNum;
 
     const query = {
         organization_id: new Types.ObjectId(organization_id),
-        employee_id: new Types.ObjectId(employee_id),
+        employee_uuid: new Types.ObjectId(employee_uuid),
         is_deleted: false
     };
 
@@ -452,8 +470,8 @@ const getAllAssignmentsAPIHandler = async_error_handler(async (req: CustomReques
         return;
     }
 
-    const pageNum = parseInt(page as string) || 1;
-    const limitNum = parseInt(limit as string) || 10;
+    const pageNum = Number(page) || 1;
+    const limitNum = Number(limit) || 10;
     const skip = (pageNum - 1) * limitNum;
 
     const query: any = {
@@ -471,15 +489,66 @@ const getAllAssignmentsAPIHandler = async_error_handler(async (req: CustomReques
     }
 
     const totalCount = await EMPLOYEE_SALARY_ASSIGNMENT_MODEL.countDocuments(query);
+    const pipeline: any[] = [
+        {
+            $match: {
+                status: "ACTIVE"
+            }
+        },
+        {
+            $lookup: {
+                from: "employee_details",
+                localField: "employee_uuid",
+                foreignField: "_id",
+                as: "Employee_details"
+            }
+        },
+        {
+            $unwind: {
+                path: "$Employee_details"
+            }
+        },
+        {
+            $lookup: {
+                from: "payroll_salary_templates",
+                localField: "template_id",
+                foreignField: "_id",
+                as: "template_details"
+            }
+        },
+        {
+            $unwind: {
+                path: "$template_details"
+            }
+        },
+        // {
+        //     $project: {
+        //         template_id: 1,
+        //         template_name:
+        //             "$template_details.template_name",
+        //         template_code:
+        //             "$template_details.template_code",
+        //         deductions: "$deductions_snapshot",
+        //         earnings: "$earnings_snapshot",
+        //         employee: 1,
+        //         employee_email:
+        //             "$Employee_details.personal_details.email",
+        //         employee_id:
+        //             "$Employee_details.job_details.employee_id",
+        //         annual_ctc: "$annual_ctc",
+        //         monthly_gross: "$monthly_gross",
+        //         employee_name: {
+        //             $concat: [
+        //                 "$Employee_details.personal_details.firstName",
+        //                 " ",
+        //                 "$Employee_details.personal_details.lastName"
+        //             ]
+        //         }
+        //     }
+        // }
+    ]
 
-    const assignments = await EMPLOYEE_SALARY_ASSIGNMENT_MODEL.find(query)
-        .select('employee_id template_id annual_ctc monthly_gross effective_from status is_active version createdAt')
-        .populate('employee_id', 'employee_name employee_id department_id designation_id')
-        .populate('template_id', 'template_name template_code')
-        .sort({ createdAt: -1 })
-        .skip(skip)
-        .limit(limitNum)
-        .lean();
+    const assignments = await EMPLOYEE_SALARY_ASSIGNMENT_MODEL.aggregate(pipeline);
 
     // Enhance with computed field: Used By (employees_count from template)
     const enhancedAssignments = assignments.map(a => ({
@@ -505,18 +574,26 @@ const getAllAssignmentsAPIHandler = async_error_handler(async (req: CustomReques
 //  GET ASSIGNMENT BY ID
 const getAssignmentByIdAPIHandler = async_error_handler(async (req: CustomRequest, res: Response) => {
     const organization_id = req.user?.organization_id;
-    const { id } = req.body;
+    const { id, employee_id } = req.body;
 
     if (!organization_id) {
         res.status(400).json(apiResponse(400, 'Organization Id is required'));
         return;
     }
 
-    const assignment = await EMPLOYEE_SALARY_ASSIGNMENT_MODEL.findOne({
-        _id: new Types.ObjectId(id),
+    const query: any = {
         organization_id: new Types.ObjectId(organization_id),
         is_deleted: false
-    })
+    };
+
+    if (id) {
+        query._id = new Types.ObjectId(id);
+    } else {
+        query.employee_id = new Types.ObjectId(employee_id);
+        query.is_active = true;
+    }
+
+    const assignment = await EMPLOYEE_SALARY_ASSIGNMENT_MODEL.findOne(query)
         .populate('employee_id', 'employee_name employee_id department_id designation_id email')
         .populate('template_id', 'template_name template_code status')
         .lean();

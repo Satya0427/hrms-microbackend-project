@@ -609,7 +609,13 @@ const createTemplateAPIHandler = async_error_handler(async (req: CustomRequest, 
         })),
         deductions: deductions ? deductions.map((d: any) => ({
             component_id: new Types.ObjectId(d.component_id),
-            override_allowed: d.override_allowed || false
+            override_allowed: d.override_allowed || false,
+            value_type: d.value_type,
+            fixed_amount: d.fixed_amount,
+            percentage: d.percentage,
+            formula: d.formula,
+            calculation_order: d.calculation_order,
+            is_mandatory: d.is_mandatory !== undefined ? d.is_mandatory : true
         })) : [],
         ctc_preview: ctc_preview || {},
         allow_manual_override: allow_manual_override || false,
@@ -927,7 +933,13 @@ const updateTemplateAPIHandler = async_error_handler(async (req: CustomRequest, 
     if (deductions !== undefined) {
         updateData.deductions = deductions.map((d: any) => ({
             component_id: new Types.ObjectId(d.component_id),
-            override_allowed: d.override_allowed || false
+            override_allowed: d.override_allowed || false,
+            value_type: d.value_type,
+            fixed_amount: d.fixed_amount,
+            percentage: d.percentage,
+            formula: d.formula,
+            calculation_order: d.calculation_order,
+            is_mandatory: d.is_mandatory !== undefined ? d.is_mandatory : true
         }));
     }
 

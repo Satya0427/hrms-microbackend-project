@@ -19,7 +19,15 @@ export interface ITemplateEarning {
 export interface ITemplateDeduction {
     component_id: Types.ObjectId;
     override_allowed: boolean;
+    value_type: ValueType;
+    fixed_amount?: number;
+    percentage?: number;
+    formula?: string;
+    calculation_order: number;
+    is_mandatory: boolean;
 }
+
+
 
 // CTC Preview Structure
 export interface ICTCPreview {
@@ -36,40 +44,40 @@ export interface ICTCPreview {
 export interface IPayrollSalaryTemplate extends Document {
     _id: Types.ObjectId;
     organization_id: Types.ObjectId;
-    
+
     // Basic Information
     template_name: string;
     template_code: string;
     description?: string;
     effective_from: Date;
     status: TemplateStatusType;
-    
+
     // Components Configuration
     earnings: ITemplateEarning[];
     deductions: ITemplateDeduction[];
-    
+
     // CTC Preview
     ctc_preview?: ICTCPreview;
-    
+
     // Display & Controls
     allow_manual_override: boolean;
     lock_after_assignment: boolean;
     version_control_enabled: boolean;
-    
+
     // Version Management
     version: number;
     parent_template_id?: Types.ObjectId;
-    
+
     // Assignment Info
     employees_count: number;
-    
+
     // Soft Delete
     is_deleted: boolean;
-    
+
     // Audit
     created_by: Types.ObjectId;
     updated_by?: Types.ObjectId;
-    
+
     createdAt?: Date;
     updatedAt?: Date;
 }
@@ -82,7 +90,7 @@ const TemplateEarningSchema = new Schema({
     },
     value_type: {
         type: String,
-        enum: ["fixed", "percentage","formula"],
+        enum: ["fixed", "percentage", "formula"],
         required: true
     },
     fixed_amount: {
@@ -121,6 +129,32 @@ const TemplateDeductionSchema = new Schema({
     override_allowed: {
         type: Boolean,
         default: false
+    },
+    value_type: {
+        type: String,
+        enum: ["fixed", "percentage", "formula"],
+        required: true
+    },
+    fixed_amount: {
+        type: Number,
+        min: 0
+    },
+    percentage: {
+        type: Number,
+        min: 0,
+        max: 100
+    },
+    formula: {
+        type: String
+    },
+    calculation_order: {
+        type: Number,
+        required: true,
+        min: 1
+    },
+    is_mandatory: {
+        type: Boolean,
+        default: true
     }
 }, { _id: false });
 
@@ -161,7 +195,7 @@ const PAYROLL_SALARY_TEMPLATE_SCHEMA = new Schema(
             required: true,
             index: true
         },
-        
+
         template_name: {
             type: String,
             required: true,
@@ -169,7 +203,7 @@ const PAYROLL_SALARY_TEMPLATE_SCHEMA = new Schema(
             minlength: 2,
             maxlength: 100
         },
-        
+
         template_code: {
             type: String,
             required: true,
@@ -177,78 +211,78 @@ const PAYROLL_SALARY_TEMPLATE_SCHEMA = new Schema(
             uppercase: true,
             match: /^[A-Z0-9_]+$/
         },
-        
+
         description: {
             type: String,
             trim: true
         },
-        
+
         effective_from: {
             type: Date,
             required: true
         },
-        
+
         status: {
             type: String,
             enum: ["ACTIVE", "INACTIVE"],
             default: "ACTIVE"
         },
-        
+
         earnings: {
             type: [TemplateEarningSchema],
             default: []
         },
-        
+
         deductions: {
             type: [TemplateDeductionSchema],
             default: []
         },
-        
+
         ctc_preview: {
             type: CTCPreviewSchema
         },
-        
+
         allow_manual_override: {
             type: Boolean,
             default: false
         },
-        
+
         lock_after_assignment: {
             type: Boolean,
             default: false
         },
-        
+
         version_control_enabled: {
             type: Boolean,
             default: false
         },
-        
+
         version: {
             type: Number,
             default: 1
         },
-        
+
         parent_template_id: {
             type: Types.ObjectId,
             ref: "payroll_salary_templates"
         },
-        
+
         employees_count: {
             type: Number,
             default: 0
         },
-        
+
         is_deleted: {
             type: Boolean,
             default: false
         },
-        
+
         created_by: {
             type: Types.ObjectId,
             ref: "users",
             required: true
         },
-        
+
         updated_by: {
             type: Types.ObjectId,
             ref: "users"
